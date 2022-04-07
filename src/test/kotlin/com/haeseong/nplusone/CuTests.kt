@@ -30,7 +30,7 @@ class CuTests {
                                 it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.name")).text,
                                 it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.price")).text.replace(Regex("[,원\\s]"), "").toBigDecimal(),
                                 it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_img > img")).getAttribute("src"),
-                                DiscountType.parse(it.findElement(By.cssSelector("a > div.badge > span")).text),
+                                DiscountType.parse(it.findElement(By.cssSelector("a > div.badge > span")).text.trim()),
                         )
                     }
 
