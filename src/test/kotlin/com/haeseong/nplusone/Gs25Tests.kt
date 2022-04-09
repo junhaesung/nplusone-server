@@ -10,12 +10,6 @@ import java.util.concurrent.TimeUnit
 class Gs25Tests {
     @Test
     fun paging() {
-        // 다음페이지
-        // #contents > div.cnt > div.cnt_section.mt50 > div > div > div:nth-child(3) > div > a[onclick].next
-
-        // 다음탭
-        // #TWO_TO_ONE
-
         WebDriverManager.chromedriver().setup()
         // 1. Start the session
         val driver = ChromeDriver()

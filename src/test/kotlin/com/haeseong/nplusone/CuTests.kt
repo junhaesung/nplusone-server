@@ -7,7 +7,6 @@ import org.openqa.selenium.InvalidElementStateException
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
 import org.openqa.selenium.chrome.ChromeDriver
-import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 
 class CuTests {
@@ -75,31 +74,3 @@ class CuTests {
     }
 }
 
-data class DiscountedItem(
-        val name: String?,
-        val price: BigDecimal?,
-        val imageUrl: String?,
-        val discountType: DiscountType,
-) {
-    fun validate() {
-        assert(!name.isNullOrBlank()) { "'name' is must not blank" }
-        assert(price != null) { "'price' must not be null" }
-        assert(price!! >= BigDecimal.ZERO) { "'price' must be greater than or equal to zero" }
-        assert(imageUrl != null) { "'imageUrl' must not be null" }
-    }
-}
-
-enum class DiscountType {
-    ONE_PLUS_ONE,
-    TWO_PLUS_ONE,
-    UNKNOWN,
-    ;
-
-    companion object {
-        fun parse(text: String): DiscountType = when (text) {
-            "1+1" -> ONE_PLUS_ONE
-            "2+1" -> TWO_PLUS_ONE
-            else -> UNKNOWN
-        }
-    }
-}
