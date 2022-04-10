@@ -1,5 +1,8 @@
 package com.haeseong.nplusone.domain
 
+import com.haeseong.nplusone.domain.item.DiscountType
+import com.haeseong.nplusone.domain.item.ItemCreateVo
+import com.haeseong.nplusone.domain.item.ItemService
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

@@ -1,12 +1,12 @@
-package com.haeseong.nplusone.domain
+package com.haeseong.nplusone.domain.item
 
 import java.math.BigDecimal
 
 data class DiscountedItem(
-        val name: String?,
-        val price: BigDecimal?,
-        val imageUrl: String?,
-        val discountType: DiscountType,
+    val name: String?,
+    val price: BigDecimal?,
+    val imageUrl: String?,
+    val discountType: DiscountType,
 ) {
     fun validate() {
         assert(!name.isNullOrBlank()) { "'name' is must not blank" }

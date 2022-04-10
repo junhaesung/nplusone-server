@@ -1,8 +1,8 @@
 package com.haeseong.nplusone.ui
 
-import com.haeseong.nplusone.domain.ItemCreateVo
-import com.haeseong.nplusone.domain.ItemService
-import com.haeseong.nplusone.domain.ItemVo
+import com.haeseong.nplusone.domain.item.ItemCreateVo
+import com.haeseong.nplusone.domain.item.ItemService
+import com.haeseong.nplusone.domain.item.ItemVo
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping

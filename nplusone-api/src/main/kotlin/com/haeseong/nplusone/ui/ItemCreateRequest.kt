@@ -1,7 +1,7 @@
 package com.haeseong.nplusone.ui
 
-import com.haeseong.nplusone.domain.DiscountType
-import com.haeseong.nplusone.domain.StoreType
+import com.haeseong.nplusone.domain.item.DiscountType
+import com.haeseong.nplusone.domain.item.StoreType
 import java.math.BigDecimal
 
 data class ItemCreateRequest(

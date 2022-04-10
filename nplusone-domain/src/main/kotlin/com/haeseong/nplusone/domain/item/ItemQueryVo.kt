@@ -1,4 +1,4 @@
-package com.haeseong.nplusone.domain
+package com.haeseong.nplusone.domain.item
 
 data class ItemQueryVo(
     val discountType: DiscountType?,

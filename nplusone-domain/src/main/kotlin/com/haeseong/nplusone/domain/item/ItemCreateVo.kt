@@ -1,6 +1,7 @@
-package com.haeseong.nplusone.domain
+package com.haeseong.nplusone.domain.item
 
 import java.math.BigDecimal
+import java.time.YearMonth
 
 data class ItemCreateVo(
     val name: String,
@@ -8,4 +9,5 @@ data class ItemCreateVo(
     val imageUrl: String?,
     val discountType: DiscountType,
     val storeType: StoreType,
+    val yearMonth: YearMonth,
 )

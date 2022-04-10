@@ -1,4 +1,4 @@
-package com.haeseong.nplusone.domain
+package com.haeseong.nplusone.domain.item
 
 import org.hibernate.annotations.GenericGenerator
 import org.springframework.data.annotation.CreatedDate
@@ -6,6 +6,7 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.math.BigDecimal
 import java.time.LocalDateTime
+import java.time.YearMonth
 import javax.persistence.*
 
 @Entity
@@ -25,6 +26,7 @@ class Item(
     val discountType: DiscountType,
     @Enumerated(EnumType.STRING)
     val storeType: StoreType,
+    val yearMonth: YearMonth,
 ) {
     @CreatedDate
     lateinit var createdAt: LocalDateTime
@@ -55,6 +57,7 @@ class Item(
                 imageUrl = itemCreateVo.imageUrl,
                 discountType = itemCreateVo.discountType,
                 storeType = itemCreateVo.storeType,
+                yearMonth = itemCreateVo.yearMonth,
             )
         }
     }

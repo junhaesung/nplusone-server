@@ -1,4 +1,4 @@
-package com.haeseong.nplusone.domain
+package com.haeseong.nplusone.domain.item
 
 enum class DiscountType {
     ONE_PLUS_ONE,

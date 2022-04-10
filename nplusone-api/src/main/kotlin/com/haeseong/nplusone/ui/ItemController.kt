@@ -1,10 +1,9 @@
 package com.haeseong.nplusone.ui
 
-import com.haeseong.nplusone.domain.DiscountType
-import com.haeseong.nplusone.domain.ItemQueryVo
-import com.haeseong.nplusone.domain.ItemService
-import com.haeseong.nplusone.domain.StoreType
-import org.springframework.data.domain.Slice
+import com.haeseong.nplusone.domain.item.DiscountType
+import com.haeseong.nplusone.domain.item.ItemQueryVo
+import com.haeseong.nplusone.domain.item.ItemService
+import com.haeseong.nplusone.domain.item.StoreType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -37,6 +36,7 @@ class ItemController(
                     imageUrl = it.imageUrl,
                     discountType = it.discountType,
                     storeType = it.storeType,
+                    yearMonth = it.yearMonth,
                 )
             }
         return ApiResponse.success(itemResponseSlice)
