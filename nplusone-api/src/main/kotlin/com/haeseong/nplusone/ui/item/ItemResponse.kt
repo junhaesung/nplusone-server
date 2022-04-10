@@ -1,7 +1,8 @@
-package com.haeseong.nplusone.ui
+package com.haeseong.nplusone.ui.item
 
 import com.haeseong.nplusone.domain.item.DiscountType
 import com.haeseong.nplusone.domain.item.StoreType
+import com.haeseong.nplusone.ui.OffsetIdSupport
 import java.math.BigDecimal
 import java.time.YearMonth
 

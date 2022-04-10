@@ -1,4 +1,4 @@
-package com.haeseong.nplusone.ui
+package com.haeseong.nplusone.ui.item
 
 import com.haeseong.nplusone.domain.item.DiscountType
 import com.haeseong.nplusone.domain.item.StoreType

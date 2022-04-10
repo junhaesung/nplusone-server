@@ -1,9 +1,10 @@
-package com.haeseong.nplusone.ui
+package com.haeseong.nplusone.ui.item
 
 import com.haeseong.nplusone.domain.item.DiscountType
 import com.haeseong.nplusone.domain.item.ItemQueryVo
 import com.haeseong.nplusone.domain.item.ItemService
 import com.haeseong.nplusone.domain.item.StoreType
+import com.haeseong.nplusone.ui.ApiResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam

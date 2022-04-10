@@ -3,10 +3,12 @@ package com.haeseong.nplusone.ui
 import com.haeseong.nplusone.domain.item.ItemCreateVo
 import com.haeseong.nplusone.domain.item.ItemService
 import com.haeseong.nplusone.domain.item.ItemVo
+import com.haeseong.nplusone.ui.item.ItemCreateRequest
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.time.YearMonth
 
 @RestController
 @RequestMapping("/api/test/items")
@@ -23,6 +25,7 @@ class TestController(
             imageUrl = itemCreateRequest.imageUrl,
             discountType = itemCreateRequest.discountType,
             storeType = itemCreateRequest.storeType,
+            yearMonth = YearMonth.now(),
         )
         return itemService.create(itemCreateVo = itemCreateVo)
     }
