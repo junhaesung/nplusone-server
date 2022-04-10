@@ -23,6 +23,8 @@ class Item(
     val imageUrl: String?,
     @Enumerated(EnumType.STRING)
     val discountType: DiscountType,
+    @Enumerated(EnumType.STRING)
+    val storeType: StoreType,
 ) {
     @CreatedDate
     lateinit var createdAt: LocalDateTime
@@ -52,6 +54,7 @@ class Item(
                 price = itemCreateVo.price,
                 imageUrl = itemCreateVo.imageUrl,
                 discountType = itemCreateVo.discountType,
+                storeType = itemCreateVo.storeType,
             )
         }
     }

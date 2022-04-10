@@ -8,6 +8,7 @@ data class ItemVo(
     val price: BigDecimal,
     val imageUrl: String?,
     val discountType: DiscountType,
+    val storeType: StoreType,
 ) {
     companion object {
         fun from(item: Item): ItemVo = ItemVo(
@@ -16,6 +17,7 @@ data class ItemVo(
             price = item.price,
             imageUrl = item.imageUrl,
             discountType = item.discountType,
+            storeType = item.storeType,
         )
     }
 }
