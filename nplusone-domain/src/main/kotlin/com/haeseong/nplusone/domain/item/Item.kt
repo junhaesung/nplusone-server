@@ -26,6 +26,7 @@ class Item(
     val discountType: DiscountType,
     @Enumerated(EnumType.STRING)
     val storeType: StoreType,
+    @Column(name = "itemYearMonth")
     val yearMonth: YearMonth,
 ) {
     @CreatedDate

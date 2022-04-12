@@ -4,7 +4,7 @@ import org.hibernate.annotations.GenericGenerator
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
-import java.time.LocalDate
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
@@ -17,15 +17,16 @@ class Config(
         strategy = "com.haeseong.nplusone.infrastructure.generator.SnowflakeIdGenerator",
     )
     val configId: Long = 0L,
-    @Column(unique = true)
+    @Column(name = "configKey", unique = true)
     val key: String,
+    @Column(name = "configValue")
     var value: String,
 ) {
     @CreatedDate
-    lateinit var createdAt: LocalDate
+    lateinit var createdAt: LocalDateTime
 
     @LastModifiedDate
-    lateinit var updatedAt: LocalDate
+    lateinit var updatedAt: LocalDateTime
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -11,11 +11,15 @@ class YearMonthStringAttributeConverter : AttributeConverter<YearMonth, Date> {
     override fun convertToDatabaseColumn(attribute: YearMonth?): Date? {
         return attribute?.run {
             Date.from(this.atDay(1).atStartOfDay()
-                .toInstant(ZoneOffset.of("+09:00")))
+                .toInstant(ZONE_OFFSET_SEOUL))
         }
     }
 
     override fun convertToEntityAttribute(dbData: Date?): YearMonth? {
-        return dbData?.toInstant()?.run { YearMonth.from(this) }
+        return dbData?.toInstant()?.run { YearMonth.from(this.atZone(ZONE_OFFSET_SEOUL)) }
+    }
+
+    companion object {
+        val ZONE_OFFSET_SEOUL: ZoneOffset = ZoneOffset.of("+09:00")
     }
 }
