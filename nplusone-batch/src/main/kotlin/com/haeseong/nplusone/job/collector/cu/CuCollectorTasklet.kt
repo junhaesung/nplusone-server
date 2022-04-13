@@ -9,6 +9,7 @@ import org.openqa.selenium.InvalidElementStateException
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.batch.core.StepContribution
@@ -34,7 +35,9 @@ open class CuCollectorTasklet : Tasklet, DiscountedItemValidator {
 
     private fun getDiscountedItems(): List<DiscountedItem> {
         WebDriverManager.chromedriver().setup()
-        val driver = ChromeDriver()
+        val chromeOptions = ChromeOptions()
+        chromeOptions.setHeadless(true)
+        val driver = ChromeDriver(chromeOptions)
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS)
 
         try {

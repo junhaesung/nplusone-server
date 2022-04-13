@@ -36,7 +36,7 @@ open class Gs25CollectorTasklet : Tasklet, DiscountedItemValidator {
     private fun getDiscountedItems(): List<DiscountedItem> {
         WebDriverManager.chromedriver().setup()
         val chromeOptions = ChromeOptions()
-        chromeOptions.addArguments("headless")
+        chromeOptions.setHeadless(true)
         val driver = ChromeDriver(chromeOptions)
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS)
 
