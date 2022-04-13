@@ -119,7 +119,7 @@ open class Gs25CollectorTasklet : Tasklet, DiscountedItemValidator {
                     price = it.price ?: BigDecimal.ZERO,
                     imageUrl = it.imageUrl,
                     discountType = it.discountType,
-                    storeType = StoreType.CU,
+                    storeType = StoreType.GS25,
                     yearMonth = now,
                 )
             )
