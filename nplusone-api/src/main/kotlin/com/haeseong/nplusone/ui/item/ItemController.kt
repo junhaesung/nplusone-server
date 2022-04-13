@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/items")
+@RequestMapping("/api/v1/items")
 class ItemController(
     private val itemService: ItemService,
 ) {
     @GetMapping
-    fun list(
+    fun getItems(
         @RequestParam(required = false) discountType: DiscountType?,
         @RequestParam(required = false) storeType: StoreType?,
         @RequestParam(required = false, defaultValue = "0") offsetId: Long,
