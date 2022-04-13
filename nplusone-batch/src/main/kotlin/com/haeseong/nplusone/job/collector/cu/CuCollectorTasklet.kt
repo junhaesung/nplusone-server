@@ -1,6 +1,7 @@
 package com.haeseong.nplusone.job.collector.cu
 
 import com.haeseong.nplusone.domain.item.*
+import com.haeseong.nplusone.job.collector.DiscountedItem
 import com.haeseong.nplusone.job.collector.DiscountedItemValidator
 import io.github.bonigarcia.wdm.WebDriverManager
 import org.openqa.selenium.By
