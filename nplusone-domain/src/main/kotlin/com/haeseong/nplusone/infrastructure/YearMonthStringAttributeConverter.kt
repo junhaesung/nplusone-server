@@ -2,24 +2,18 @@ package com.haeseong.nplusone.infrastructure
 
 import java.time.YearMonth
 import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.persistence.AttributeConverter
 import javax.persistence.Converter
 
 @Converter(autoApply = true)
-class YearMonthStringAttributeConverter : AttributeConverter<YearMonth, Date> {
-    override fun convertToDatabaseColumn(attribute: YearMonth?): Date? {
-        return attribute?.run {
-            Date.from(this.atDay(1).atStartOfDay()
-                .toInstant(ZONE_OFFSET_SEOUL))
-        }
+class YearMonthStringAttributeConverter : AttributeConverter<YearMonth, String> {
+    override fun convertToDatabaseColumn(attribute: YearMonth?): String? {
+        return attribute?.format(DateTimeFormatter.ofPattern("yyyy-MM"))
     }
 
-    override fun convertToEntityAttribute(dbData: Date?): YearMonth? {
-        return dbData?.toInstant()?.run { YearMonth.from(this.atZone(ZONE_OFFSET_SEOUL)) }
-    }
-
-    companion object {
-        val ZONE_OFFSET_SEOUL: ZoneOffset = ZoneOffset.of("+09:00")
+    override fun convertToEntityAttribute(dbData: String?): YearMonth? {
+        return dbData?.run { YearMonth.parse(this) }
     }
 }
