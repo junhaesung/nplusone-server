@@ -9,9 +9,8 @@ data class DiscountedItem(
     val discountType: DiscountType,
 ) {
     fun validate() {
-        assert(!name.isNullOrBlank()) { "'name' is must not blank" }
-        assert(price != null) { "'price' must not be null" }
-        assert(price!! >= BigDecimal.ZERO) { "'price' must be greater than or equal to zero" }
-        assert(imageUrl != null) { "'imageUrl' must not be null" }
+        require(!name.isNullOrBlank()) { "'name' is must not blank" }
+        require(price != null) { "'price' must not be null" }
+        require(price >= BigDecimal.ZERO) { "'price' must be greater than or equal to zero" }
     }
 }

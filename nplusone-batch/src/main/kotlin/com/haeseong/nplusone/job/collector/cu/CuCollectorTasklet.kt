@@ -1,6 +1,7 @@
 package com.haeseong.nplusone.job.collector.cu
 
 import com.haeseong.nplusone.domain.item.*
+import com.haeseong.nplusone.job.collector.DiscountedItemValidator
 import io.github.bonigarcia.wdm.WebDriverManager
 import org.openqa.selenium.By
 import org.openqa.selenium.InvalidElementStateException
@@ -18,7 +19,7 @@ import java.math.BigDecimal
 import java.time.YearMonth
 import java.util.concurrent.TimeUnit
 
-open class CuCollectorTasklet : Tasklet {
+open class CuCollectorTasklet : Tasklet, DiscountedItemValidator {
     @Autowired
     lateinit var itemService: ItemService
 
@@ -72,19 +73,6 @@ open class CuCollectorTasklet : Tasklet {
                 break
             }
         }
-    }
-
-    private fun validateAll(discountedItems: List<DiscountedItem>) {
-        val invalidItems = discountedItems.filter {
-            try {
-                it.validate()
-                false
-            } catch (e: Exception) {
-                log.error("Invalid item", e)
-                true
-            }
-        }
-        log.info("Number of invalid items: ${invalidItems.size}")
     }
 
     private fun saveAll(discountedItems: List<DiscountedItem>) {

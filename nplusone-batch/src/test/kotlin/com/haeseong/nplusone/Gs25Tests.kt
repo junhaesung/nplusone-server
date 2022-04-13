@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import java.util.concurrent.TimeUnit
 
 @Disabled
@@ -15,8 +16,11 @@ class Gs25Tests {
     @Test
     fun paging() {
         WebDriverManager.chromedriver().setup()
+        val chromeOptions = ChromeOptions()
+        chromeOptions.addArguments("headless")
+
         // 1. Start the session
-        val driver = ChromeDriver()
+        val driver = ChromeDriver(chromeOptions)
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS)
 
         try {
@@ -26,23 +30,30 @@ class Gs25Tests {
 
             // 1+1 상품 조회
             while (true) {
-                val discountedItems = driver.findElementsByCssSelector("#contents > div.cnt > div.cnt_section.mt50 > div > div > div:nth-child(3) > ul > li")
+                val discountedItems =
+                    driver.findElementsByCssSelector("#contents > div.cnt > div.cnt_section.mt50 > div > div > div:nth-child(3) > ul > li")
                         .map {
                             DiscountedItem(
-                                    it.findElement(By.cssSelector("div.prod_box > p.tit")).text,
-                                    it.findElement(By.cssSelector("div.prod_box > p.price")).text.replace(Regex("[,원\\s]"), "").toBigDecimal(),
-                                    it.findElement(By.cssSelector("div.prod_box > p.img > img")).getAttribute("src"),
-                                    DiscountType.parse(it.findElement(By.cssSelector("div.prod_box > div > p > span")).text.trim()),
+                                name = it.findElement(By.cssSelector("div.prod_box > p.tit")).text,
+                                price = it.findElement(By.cssSelector("div.prod_box > p.price")).text.replace(Regex("[,원\\s]"),
+                                    "").toBigDecimal(),
+                                imageUrl = try {
+                                    it.findElement(By.cssSelector("div.prod_box > p.img > img")).getAttribute("src")
+                                } catch (e: NoSuchElementException) {
+                                    null
+                                },
+                                discountType = DiscountType.parse(it.findElement(By.cssSelector("div.prod_box > div > p > span")).text.trim()),
                             )
                         }
                 items.addAll(discountedItems)
 
                 try {
-                    val nextButton = driver.findElementByCssSelector("#contents > div.cnt > div.cnt_section.mt50 > div > div > div:nth-child(3) > div > a[onclick].next")
+                    val nextButton =
+                        driver.findElementByCssSelector("#contents > div.cnt > div.cnt_section.mt50 > div > div > div:nth-child(3) > div > a[onclick].next")
                     nextButton.click()
                     Thread.sleep(1000)
                 } catch (e: NoSuchElementException) {
-                    println("더 보기 버튼이 없음")
+                    println("더 보기 버튼이 없음 (1+1)")
                     break
                 }
             }
@@ -53,13 +64,19 @@ class Gs25Tests {
 
             // 2+1 상품 조회
             while (true) {
-                val discountedItems = driver.findElementsByCssSelector("#contents > div.cnt > div.cnt_section.mt50 > div > div > div:nth-child(5) > ul > li")
+                val discountedItems =
+                    driver.findElementsByCssSelector("#contents > div.cnt > div.cnt_section.mt50 > div > div > div:nth-child(5) > ul > li")
                         .map {
                             DiscountedItem(
-                                    it.findElement(By.cssSelector("div.prod_box > p.tit")).text,
-                                    it.findElement(By.cssSelector("div.prod_box > p.price")).text.replace(Regex("[,원\\s]"), "").toBigDecimal(),
-                                    it.findElement(By.cssSelector("div.prod_box > p.img > img")).getAttribute("src"),
-                                    DiscountType.parse(it.findElement(By.cssSelector("div.prod_box > div > p > span")).text.trim()),
+                                name = it.findElement(By.cssSelector("div.prod_box > p.tit")).text,
+                                price = it.findElement(By.cssSelector("div.prod_box > p.price")).text.replace(Regex("[,원\\s]"),
+                                    "").toBigDecimal(),
+                                imageUrl = try {
+                                    it.findElement(By.cssSelector("div.prod_box > p.img > img")).getAttribute("src")
+                                } catch (e: NoSuchElementException) {
+                                    null
+                                },
+                                discountType = DiscountType.parse(it.findElement(By.cssSelector("div.prod_box > div > p > span")).text.trim()),
                             )
                         }
                 items.addAll(discountedItems)
@@ -69,7 +86,7 @@ class Gs25Tests {
                     nextButton.click()
                     Thread.sleep(1000)
                 } catch (e: NoSuchElementException) {
-                    println("더 보기 버튼이 없음")
+                    println("더 보기 버튼이 없음 (2+1)")
                     break
                 }
             }
