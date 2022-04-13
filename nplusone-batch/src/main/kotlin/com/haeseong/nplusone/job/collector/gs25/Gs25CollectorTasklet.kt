@@ -117,7 +117,7 @@ open class Gs25CollectorTasklet : Tasklet, DiscountedItemValidator {
                 itemCreateVo = ItemCreateVo(
                     name = it.name ?: "",
                     price = it.price ?: BigDecimal.ZERO,
-                    imageUrl = it.imageUrl,
+                    imageUrl = it.imageUrl ?: NO_IMAGE_URL,
                     discountType = it.discountType,
                     storeType = StoreType.GS25,
                     yearMonth = now,
@@ -128,5 +128,6 @@ open class Gs25CollectorTasklet : Tasklet, DiscountedItemValidator {
 
     companion object {
         val log : Logger = LoggerFactory.getLogger(Gs25CollectorTasklet::class.java)
+        const val NO_IMAGE_URL = "http://gs25.gsretail.com/_ui/desktop/common/images/gscvs/products/prd_no_img.gif"
     }
 }
