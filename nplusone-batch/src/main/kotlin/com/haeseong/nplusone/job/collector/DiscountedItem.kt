@@ -1,5 +1,6 @@
-package com.haeseong.nplusone.domain.item
+package com.haeseong.nplusone.job.collector
 
+import com.haeseong.nplusone.domain.item.DiscountType
 import java.math.BigDecimal
 
 data class DiscountedItem(

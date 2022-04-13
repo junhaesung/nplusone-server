@@ -1,7 +1,7 @@
 package com.haeseong.nplusone
 
 import com.haeseong.nplusone.domain.item.DiscountType
-import com.haeseong.nplusone.domain.item.DiscountedItem
+import com.haeseong.nplusone.job.collector.DiscountedItem
 import io.github.bonigarcia.wdm.WebDriverManager
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
