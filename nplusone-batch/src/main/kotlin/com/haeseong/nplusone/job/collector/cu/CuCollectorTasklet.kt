@@ -37,6 +37,7 @@ open class CuCollectorTasklet : Tasklet, DiscountedItemValidator {
         WebDriverManager.chromedriver().setup()
         val chromeOptions = ChromeOptions()
         chromeOptions.setHeadless(true)
+        chromeOptions.addArguments("--no-sandbox", "--disable-dev-shm-usage")
         val driver = ChromeDriver(chromeOptions)
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS)
 

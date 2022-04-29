@@ -39,9 +39,14 @@ open class Emart24CollectorTasklet : Tasklet, DiscountedItemValidator {
     private fun getOnePlusOneItems(): List<DiscountedItem> {
         WebDriverManager.chromedriver().setup()
         val chromeOptions = ChromeOptions()
-//        chromeOptions.setHeadless(true)
+        chromeOptions.setHeadless(true)
+        chromeOptions.addArguments(
+            "--no-sandbox",
+            "--disable-dev-shm-usage",
+            "--window-size=1920x1080", // headless 에서 click 사용하려면 필요함
+        )
         val driver = ChromeDriver(chromeOptions)
-        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS)
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS)
 
         val items = mutableListOf<DiscountedItem>()
 
@@ -53,9 +58,10 @@ open class Emart24CollectorTasklet : Tasklet, DiscountedItemValidator {
                 // save all
                 val discountedItems = driver.findElementsByCssSelector("#regForm > div.section > div.eventProduct > div.tabContArea > ul > li")
                     .map {
+                        val priceText = it.findElement(By.cssSelector("div > p.price")).text.replace(Regex("[,원\\s]"), "")
                         DiscountedItem(
                             name = it.findElement(By.cssSelector( "div > p.productDiv")).text.trim(),
-                            price = it.findElement(By.cssSelector("div > p.price")).text.replace(Regex("[,원\\s]"), "").toBigDecimal(),
+                            price = if (priceText.isBlank()) BigDecimal.ZERO else priceText.toBigDecimal(),
                             imageUrl = it.findElement(By.cssSelector("div.box > p.productImg > img")).getAttribute("src"),
                             discountType = DiscountType.parse(it.findElement(By.cssSelector("div > div > p > img")).getAttribute("alt").replace(Regex("[\\s]"), "").take(3)),
                         )
@@ -80,9 +86,14 @@ open class Emart24CollectorTasklet : Tasklet, DiscountedItemValidator {
     private fun getTwoPlusOneItems(): List<DiscountedItem> {
         WebDriverManager.chromedriver().setup()
         val chromeOptions = ChromeOptions()
-//        chromeOptions.setHeadless(true)
-        val driver = ChromeDriver()
-        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS)
+        chromeOptions.setHeadless(true)
+        chromeOptions.addArguments(
+            "--no-sandbox",
+            "--disable-dev-shm-usage",
+            "--window-size=1920x1080",
+        )
+        val driver = ChromeDriver(chromeOptions)
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS)
 
         val items = mutableListOf<DiscountedItem>()
 

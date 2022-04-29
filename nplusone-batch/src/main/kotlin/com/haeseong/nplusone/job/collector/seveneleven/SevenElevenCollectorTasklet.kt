@@ -43,6 +43,7 @@ open class SevenElevenCollectorTasklet : Tasklet, DiscountedItemValidator {
         WebDriverManager.chromedriver().setup()
         val chromeOptions = ChromeOptions()
         chromeOptions.setHeadless(true)
+        chromeOptions.addArguments("--no-sandbox", "--disable-dev-shm-usage")
         // Start the session
         val driver = ChromeDriver(chromeOptions)
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS)
@@ -85,6 +86,7 @@ open class SevenElevenCollectorTasklet : Tasklet, DiscountedItemValidator {
         WebDriverManager.chromedriver().setup()
         val chromeOptions = ChromeOptions()
         chromeOptions.setHeadless(true)
+        chromeOptions.addArguments("--no-sandbox", "--disable-dev-shm-usage")
         // Start the session
         val driver = ChromeDriver(chromeOptions)
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS)
