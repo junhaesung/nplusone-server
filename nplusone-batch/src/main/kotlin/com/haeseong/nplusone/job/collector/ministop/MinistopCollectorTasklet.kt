@@ -42,6 +42,7 @@ open class MinistopCollectorTasklet : Tasklet, DiscountedItemValidator {
         val chromeOptions = ChromeOptions()
         chromeOptions.setExperimentalOption("excludeSwitches", listOf("disable-popup-blocking"));
         chromeOptions.setHeadless(true)
+        chromeOptions.addArguments("--no-sandbox", "--disable-dev-shm-usage")
 
         // Start the session
         val driver = ChromeDriver(chromeOptions)
@@ -93,6 +94,7 @@ open class MinistopCollectorTasklet : Tasklet, DiscountedItemValidator {
         val chromeOptions = ChromeOptions()
         chromeOptions.setExperimentalOption("excludeSwitches", listOf("disable-popup-blocking"))
         chromeOptions.setHeadless(true)
+        chromeOptions.addArguments("--no-sandbox", "--disable-dev-shm-usage")
 
         // Start the session
         val driver = ChromeDriver(chromeOptions)
