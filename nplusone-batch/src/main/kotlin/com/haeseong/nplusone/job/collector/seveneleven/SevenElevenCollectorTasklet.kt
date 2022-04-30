@@ -128,12 +128,11 @@ open class SevenElevenCollectorTasklet : Tasklet, DiscountedItemValidator {
                 println("더 보기 버튼이 없음")
                 break
             }
-            if (!seeMoreButton.isDisplayed) {
-                println("더 보기 버튼이 안보임")
-                break
-            }
-
             try {
+                if (!seeMoreButton.isDisplayed) {
+                    println("더 보기 버튼이 안보임")
+                    break
+                }
                 seeMoreButton.click()
                 Thread.sleep(500)
             } catch (e: InvalidElementStateException) {
