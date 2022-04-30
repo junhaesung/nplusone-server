@@ -1,11 +1,9 @@
 package com.haeseong.nplusone.domain.item
 
-import com.haeseong.nplusone.domain.config.Config
 import com.haeseong.nplusone.domain.config.ConfigService
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.YearMonth
 
 interface ItemService {
     fun create(itemCreateVo: ItemCreateVo): ItemVo
@@ -31,13 +29,11 @@ class ItemServiceImpl(
             ?: listOf(DiscountType.ONE_PLUS_ONE, DiscountType.TWO_PLUS_ONE)
         val storeTypes = itemQueryVo.storeType?.run { listOf(this) }
             ?: StoreType.values().toList()
-        val yearMonth = configService.get(Config.CONFIG_KEY_VALID_YEAR_MONTH)
-            ?.let { YearMonth.parse(it.value) }
-            ?: YearMonth.now()
-        return itemRepository.findByDiscountTypeInAndStoreTypeInAndYearMonthAndItemIdGreaterThan(
+        val validDate = configService.getValidDate()
+        return itemRepository.findByDiscountTypeInAndStoreTypeInAndReferenceDateAndItemIdGreaterThan(
             discountTypes = discountTypes,
             storeTypes = storeTypes,
-            yearMonth = yearMonth,
+            referenceDate = validDate,
             offsetId = itemQueryVo.offsetId
         ).map { ItemVo.from(it) }
     }

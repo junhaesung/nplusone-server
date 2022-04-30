@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
 import java.math.BigDecimal
+import java.time.LocalDate
 import java.time.YearMonth
 
 @Transactional
@@ -27,7 +28,7 @@ class ItemServiceImplTest {
             imageUrl = "imageUrl",
             discountType = DiscountType.ONE_PLUS_ONE,
             storeType = StoreType.CU,
-            yearMonth = YearMonth.now(),
+            referenceDate = LocalDate.now(),
         )
         // when
         val actual = sut.create(itemCreateVo = itemCreateVo)
@@ -37,6 +38,6 @@ class ItemServiceImplTest {
         assertEquals("imageUrl", actual.imageUrl)
         assertEquals(DiscountType.ONE_PLUS_ONE, actual.discountType)
         assertEquals(StoreType.CU, actual.storeType)
-        assertEquals(YearMonth.now(), actual.yearMonth)
+        assertEquals(LocalDate.now(), actual.referenceDate)
     }
 }

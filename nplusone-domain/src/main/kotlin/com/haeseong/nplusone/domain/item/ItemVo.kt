@@ -1,7 +1,7 @@
 package com.haeseong.nplusone.domain.item
 
 import java.math.BigDecimal
-import java.time.YearMonth
+import java.time.LocalDate
 
 data class ItemVo(
     val itemId: Long,
@@ -10,7 +10,7 @@ data class ItemVo(
     val imageUrl: String?,
     val discountType: DiscountType,
     val storeType: StoreType,
-    val yearMonth: YearMonth,
+    val referenceDate: LocalDate,
 ) {
     companion object {
         fun from(item: Item): ItemVo = ItemVo(
@@ -20,7 +20,7 @@ data class ItemVo(
             imageUrl = item.imageUrl,
             discountType = item.discountType,
             storeType = item.storeType,
-            yearMonth = item.yearMonth,
+            referenceDate = item.referenceDate,
         )
     }
 }

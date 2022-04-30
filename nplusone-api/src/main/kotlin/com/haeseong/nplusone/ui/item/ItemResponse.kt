@@ -4,6 +4,7 @@ import com.haeseong.nplusone.domain.item.DiscountType
 import com.haeseong.nplusone.domain.item.StoreType
 import com.haeseong.nplusone.ui.OffsetIdSupport
 import java.math.BigDecimal
+import java.time.LocalDate
 import java.time.YearMonth
 
 data class ItemResponse(
@@ -13,7 +14,7 @@ data class ItemResponse(
     val imageUrl: String?,
     val discountType: DiscountType,
     val storeType: StoreType,
-    val yearMonth: YearMonth,
+    val referenceDate: LocalDate,
 ) : OffsetIdSupport {
     override val offsetId: Long
         get() = itemId
