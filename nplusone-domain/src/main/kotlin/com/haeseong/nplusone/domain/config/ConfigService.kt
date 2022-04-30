@@ -3,14 +3,12 @@ package com.haeseong.nplusone.domain.config
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
-import java.time.Year
-import java.time.YearMonth
 
 interface ConfigService {
     fun create(key: String, value: String): ConfigVo
     fun get(key: String): ConfigVo?
-    fun setValidDate(localDate: LocalDate)
-    fun getValidDate(): LocalDate
+    fun setReferenceDate(localDate: LocalDate)
+    fun getReferenceDate(): LocalDate
 }
 
 @Transactional(readOnly = true)
@@ -31,18 +29,18 @@ class ConfigServiceImpl(
     }
 
     @Transactional
-    override fun setValidDate(localDate: LocalDate) {
+    override fun setReferenceDate(localDate: LocalDate) {
         val validDateString = localDate.toString()
-        configRepository.findByKey(Config.CONFIG_KEY_VALID_DATE)
+        configRepository.findByKey(Config.CONFIG_KEY_REFERENCE_DATE)
             ?.let { it.value = validDateString }
             ?: configRepository.save(Config.of(
-                key = Config.CONFIG_KEY_VALID_DATE,
+                key = Config.CONFIG_KEY_REFERENCE_DATE,
                 value = validDateString,
             ))
     }
 
-    override fun getValidDate(): LocalDate {
-        return get(Config.CONFIG_KEY_VALID_DATE)
+    override fun getReferenceDate(): LocalDate {
+        return get(Config.CONFIG_KEY_REFERENCE_DATE)
             ?.let { LocalDate.parse(it.value) }
             ?: LocalDate.now()
     }

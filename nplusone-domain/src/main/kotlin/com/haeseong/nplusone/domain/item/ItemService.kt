@@ -29,7 +29,7 @@ class ItemServiceImpl(
             ?: listOf(DiscountType.ONE_PLUS_ONE, DiscountType.TWO_PLUS_ONE)
         val storeTypes = itemQueryVo.storeType?.run { listOf(this) }
             ?: StoreType.values().toList()
-        val validDate = configService.getValidDate()
+        val validDate = configService.getReferenceDate()
         return itemRepository.findByDiscountTypeInAndStoreTypeInAndReferenceDateAndItemIdGreaterThan(
             discountTypes = discountTypes,
             storeTypes = storeTypes,

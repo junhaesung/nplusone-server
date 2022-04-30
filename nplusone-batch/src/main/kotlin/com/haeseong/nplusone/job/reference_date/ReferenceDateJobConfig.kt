@@ -1,4 +1,4 @@
-package com.haeseong.nplusone.job.validdate
+package com.haeseong.nplusone.job.reference_date
 
 import com.haeseong.nplusone.domain.config.ConfigService
 import com.haeseong.nplusone.infrastructure.BatchConfig
@@ -19,43 +19,43 @@ import java.time.LocalDate
 
 @ConditionalOnProperty(
     value = [BatchConfig.SPRING_BATCH_JOB_NAMES],
-    havingValue = ValidDateJobConfig.JOB_NAME
+    havingValue = ReferenceDateJobConfig.JOB_NAME
 )
 @Configuration
-class ValidDateJobConfig(
+class ReferenceDateJobConfig(
     private val jobBuilderFactory: JobBuilderFactory,
     private val jobRepository: JobRepository,
     private val stepBuilderFactory: StepBuilderFactory,
     private val configService: ConfigService,
 ) {
     @Bean
-    fun validDateJob(): Job {
+    fun referenceDateJob(): Job {
         return jobBuilderFactory[JOB_NAME]
             .repository(jobRepository)
-            .start(validDateStep())
+            .start(referenceDateStep())
             .build()
     }
 
     @Bean
     @JobScope
-    fun validDateStep(): Step {
+    fun referenceDateStep(): Step {
         return stepBuilderFactory[STEP_NAME]
-            .tasklet(validDateTasklet())
+            .tasklet(referenceDateTasklet())
             .build()
     }
 
     @Bean
     @StepScope
-    fun validDateTasklet(): Tasklet = Tasklet { _, chunkContext ->
-        val validDate = chunkContext.stepContext.jobParameters["validDate"]
+    fun referenceDateTasklet(): Tasklet = Tasklet { _, chunkContext ->
+        val validDate = chunkContext.stepContext.jobParameters["referenceDate"]
             ?.let { LocalDate.parse(it.toString()) }
             ?: LocalDate.now()
-        configService.setValidDate(validDate)
+        configService.setReferenceDate(validDate)
         RepeatStatus.FINISHED
     }
 
     companion object {
-        const val JOB_NAME = "valid-date-job"
-        const val STEP_NAME = "valid-date-step"
+        const val JOB_NAME = "reference-date-job"
+        const val STEP_NAME = "reference-date-step"
     }
 }
