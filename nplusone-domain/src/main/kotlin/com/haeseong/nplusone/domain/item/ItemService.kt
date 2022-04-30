@@ -31,9 +31,7 @@ class ItemServiceImpl(
             ?: listOf(DiscountType.ONE_PLUS_ONE, DiscountType.TWO_PLUS_ONE)
         val storeTypes = itemQueryVo.storeType?.run { listOf(this) }
             ?: StoreType.values().toList()
-        val yearMonth = configService.get(Config.CONFIG_KEY_VALID_YEAR_MONTH)
-            ?.let { YearMonth.parse(it.value) }
-            ?: YearMonth.now()
+        val yearMonth = configService.getValidYearMonth()
         return itemRepository.findByDiscountTypeInAndStoreTypeInAndYearMonthAndItemIdGreaterThan(
             discountTypes = discountTypes,
             storeTypes = storeTypes,
