@@ -50,5 +50,6 @@ class Config(
         )
 
         const val CONFIG_KEY_VALID_YEAR_MONTH = "VALID_YEAR_MONTH"
+        const val CONFIG_KEY_VALID_DATE = "VALID_DATE"
     }
 }

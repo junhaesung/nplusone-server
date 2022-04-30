@@ -37,7 +37,7 @@ class ItemController(
                     imageUrl = it.imageUrl,
                     discountType = it.discountType,
                     storeType = it.storeType,
-                    yearMonth = it.yearMonth,
+                    referenceDate = it.referenceDate,
                 )
             }
         return ApiResponse.success(itemResponseSlice)
