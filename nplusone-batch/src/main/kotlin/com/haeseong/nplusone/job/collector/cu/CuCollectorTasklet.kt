@@ -18,6 +18,7 @@ import org.springframework.batch.core.step.tasklet.Tasklet
 import org.springframework.batch.repeat.RepeatStatus
 import org.springframework.beans.factory.annotation.Autowired
 import java.math.BigDecimal
+import java.time.LocalDate
 import java.time.YearMonth
 import java.util.concurrent.TimeUnit
 
@@ -47,10 +48,10 @@ open class CuCollectorTasklet : Tasklet, DiscountedItemValidator {
             return driver.findElementsByCssSelector("#contents > div.relCon > div > ul > li")
                 .map {
                     DiscountedItem(
-                        it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.name")).text,
-                        it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.price")).text.replace(Regex("[,원\\s]"), "").toBigDecimal(),
-                        it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_img > img")).getAttribute("src"),
-                        DiscountType.parse(it.findElement(By.cssSelector("a > div.badge > span")).text.trim()),
+                        name = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.name")).text,
+                        price = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.price")).text.replace(Regex("[,원\\s]"), "").toBigDecimal(),
+                        imageUrl = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_img > img")).getAttribute("src"),
+                        discountType = DiscountType.parse(it.findElement(By.cssSelector("a > div.badge > span")).text.trim()),
                     )
                 }
         } finally {
@@ -81,7 +82,7 @@ open class CuCollectorTasklet : Tasklet, DiscountedItemValidator {
     }
 
     private fun saveAll(discountedItems: List<DiscountedItem>) {
-        val now = YearMonth.now()
+        val now = LocalDate.now()
         discountedItems.forEach {
             itemService.create(
                 itemCreateVo = ItemCreateVo(
@@ -90,7 +91,7 @@ open class CuCollectorTasklet : Tasklet, DiscountedItemValidator {
                     imageUrl = it.imageUrl,
                     discountType = it.discountType,
                     storeType = StoreType.CU,
-                    yearMonth = now,
+                    referenceDate = now,
                 )
             )
         }

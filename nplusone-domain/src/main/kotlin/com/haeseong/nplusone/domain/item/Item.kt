@@ -5,6 +5,7 @@ import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.math.BigDecimal
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
 import javax.persistence.*
@@ -26,8 +27,7 @@ class Item(
     val discountType: DiscountType,
     @Enumerated(EnumType.STRING)
     val storeType: StoreType,
-    @Column(name = "itemYearMonth")
-    val yearMonth: YearMonth,
+    val referenceDate: LocalDate,
 ) {
     @CreatedDate
     lateinit var createdAt: LocalDateTime
@@ -58,7 +58,7 @@ class Item(
                 imageUrl = itemCreateVo.imageUrl,
                 discountType = itemCreateVo.discountType,
                 storeType = itemCreateVo.storeType,
-                yearMonth = itemCreateVo.yearMonth,
+                referenceDate = itemCreateVo.referenceDate,
             )
         }
     }

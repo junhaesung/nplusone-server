@@ -19,6 +19,7 @@ import org.springframework.batch.core.step.tasklet.Tasklet
 import org.springframework.batch.repeat.RepeatStatus
 import org.springframework.beans.factory.annotation.Autowired
 import java.math.BigDecimal
+import java.time.LocalDate
 import java.time.YearMonth
 import java.util.concurrent.TimeUnit
 
@@ -142,7 +143,7 @@ open class MinistopCollectorTasklet : Tasklet, DiscountedItemValidator {
     }
 
     private fun saveAll(discountedItems: List<DiscountedItem>) {
-        val now = YearMonth.now()
+        val now = LocalDate.now()
         discountedItems.forEach {
             itemService.create(
                 itemCreateVo = ItemCreateVo(
@@ -151,7 +152,7 @@ open class MinistopCollectorTasklet : Tasklet, DiscountedItemValidator {
                     imageUrl = it.imageUrl,
                     discountType = it.discountType,
                     storeType = StoreType.MINISTOP,
-                    yearMonth = now,
+                    referenceDate = now,
                 )
             )
         }

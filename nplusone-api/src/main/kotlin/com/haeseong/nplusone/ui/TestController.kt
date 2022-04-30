@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.time.LocalDate
 import java.time.YearMonth
 
 @RestController
@@ -25,7 +26,7 @@ class TestController(
             imageUrl = itemCreateRequest.imageUrl,
             discountType = itemCreateRequest.discountType,
             storeType = itemCreateRequest.storeType,
-            yearMonth = YearMonth.now(),
+            referenceDate = LocalDate.now(),
         )
         return itemService.create(itemCreateVo = itemCreateVo)
     }
