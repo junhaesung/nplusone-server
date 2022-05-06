@@ -1,5 +1,7 @@
 package com.haeseong.nplusone.ui.item
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.haeseong.nplusone.domain.item.DiscountType
 import com.haeseong.nplusone.domain.item.StoreType
 import com.haeseong.nplusone.ui.OffsetIdSupport
@@ -16,6 +18,7 @@ data class ItemResponse(
     val storeType: StoreType,
     val referenceDate: LocalDate,
 ) : OffsetIdSupport {
+    @get:JsonIgnore
     override val offsetId: Long
         get() = itemId
 }
