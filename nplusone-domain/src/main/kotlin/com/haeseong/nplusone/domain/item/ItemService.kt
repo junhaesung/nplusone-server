@@ -20,6 +20,15 @@ class ItemServiceImpl(
     @Transactional
     override fun create(itemCreateVo: ItemCreateVo): ItemVo {
         val item = Item.from(itemCreateVo = itemCreateVo)
+        if (itemRepository.existsByReferenceDateAndNameAndStoreTypeAndDiscountType(
+                referenceDate = itemCreateVo.referenceDate,
+                name = itemCreateVo.name,
+                storeType = itemCreateVo.storeType,
+                discountType = itemCreateVo.discountType,
+            )
+        ) {
+            throw ItemDuplicatedException()
+        }
         return itemRepository.save(item)
             .run { ItemVo.from(this) }
     }
