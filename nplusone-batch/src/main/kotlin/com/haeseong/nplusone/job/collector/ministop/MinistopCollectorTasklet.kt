@@ -1,9 +1,6 @@
 package com.haeseong.nplusone.job.collector.ministop
 
-import com.haeseong.nplusone.domain.item.DiscountType
-import com.haeseong.nplusone.domain.item.ItemCreateVo
-import com.haeseong.nplusone.domain.item.ItemService
-import com.haeseong.nplusone.domain.item.StoreType
+import com.haeseong.nplusone.domain.item.*
 import com.haeseong.nplusone.job.collector.DiscountedItem
 import com.haeseong.nplusone.job.collector.DiscountedItemValidator
 import io.github.bonigarcia.wdm.WebDriverManager
@@ -145,16 +142,20 @@ open class MinistopCollectorTasklet : Tasklet, DiscountedItemValidator {
     private fun saveAll(discountedItems: List<DiscountedItem>) {
         val now = LocalDate.now()
         discountedItems.forEach {
-            itemService.create(
-                itemCreateVo = ItemCreateVo(
-                    name = it.name ?: "",
-                    price = it.price ?: BigDecimal.ZERO,
-                    imageUrl = it.imageUrl,
-                    discountType = it.discountType,
-                    storeType = StoreType.MINISTOP,
-                    referenceDate = now,
+            try {
+                itemService.create(
+                    itemCreateVo = ItemCreateVo(
+                        name = it.name ?: "",
+                        price = it.price ?: BigDecimal.ZERO,
+                        imageUrl = it.imageUrl,
+                        discountType = it.discountType,
+                        storeType = StoreType.MINISTOP,
+                        referenceDate = now,
+                    )
                 )
-            )
+            } catch (e: ItemDuplicatedException) {
+                log.warn("Item duplicated", e)
+            }
         }
     }
 
