@@ -84,16 +84,20 @@ open class CuCollectorTasklet : Tasklet, DiscountedItemValidator {
     private fun saveAll(discountedItems: List<DiscountedItem>) {
         val now = LocalDate.now()
         discountedItems.forEach {
-            itemService.create(
-                itemCreateVo = ItemCreateVo(
-                    name = it.name ?: "",
-                    price = it.price ?: BigDecimal.ZERO,
-                    imageUrl = it.imageUrl,
-                    discountType = it.discountType,
-                    storeType = StoreType.CU,
-                    referenceDate = now,
+            try {
+                itemService.create(
+                    itemCreateVo = ItemCreateVo(
+                        name = it.name ?: "",
+                        price = it.price ?: BigDecimal.ZERO,
+                        imageUrl = it.imageUrl,
+                        discountType = it.discountType,
+                        storeType = StoreType.CU,
+                        referenceDate = now,
+                    )
                 )
-            )
+            } catch (e: ItemDuplicatedException) {
+                log.warn("Item duplicated", e)
+            }
         }
     }
 

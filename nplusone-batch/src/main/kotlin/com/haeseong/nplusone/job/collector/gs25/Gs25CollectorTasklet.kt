@@ -115,16 +115,20 @@ open class Gs25CollectorTasklet : Tasklet, DiscountedItemValidator {
     private fun saveAll(discountedItems: List<DiscountedItem>) {
         val now = LocalDate.now()
         discountedItems.forEach {
-            itemService.create(
-                itemCreateVo = ItemCreateVo(
-                    name = it.name ?: "",
-                    price = it.price ?: BigDecimal.ZERO,
-                    imageUrl = it.imageUrl ?: NO_IMAGE_URL,
-                    discountType = it.discountType,
-                    storeType = StoreType.GS25,
-                    referenceDate = now,
+            try {
+                itemService.create(
+                    itemCreateVo = ItemCreateVo(
+                        name = it.name ?: "",
+                        price = it.price ?: BigDecimal.ZERO,
+                        imageUrl = it.imageUrl ?: NO_IMAGE_URL,
+                        discountType = it.discountType,
+                        storeType = StoreType.GS25,
+                        referenceDate = now,
+                    )
                 )
-            )
+            } catch (e: ItemDuplicatedException) {
+                log.warn("Item duplicated", e)
+            }
         }
     }
 
