@@ -7,7 +7,8 @@ import java.time.LocalDate
 import java.time.YearMonth
 
 interface ItemRepository : JpaRepository<Item, Long> {
-    fun findByDiscountTypeInAndStoreTypeInAndReferenceDateAndItemIdGreaterThan(
+    fun findByNameContainsAndDiscountTypeInAndStoreTypeInAndReferenceDateAndItemIdGreaterThan(
+        name: String,
         discountTypes: Collection<DiscountType>,
         storeTypes: Collection<StoreType>,
         referenceDate: LocalDate = LocalDate.now(),
