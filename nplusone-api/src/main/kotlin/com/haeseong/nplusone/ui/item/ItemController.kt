@@ -1,13 +1,11 @@
 package com.haeseong.nplusone.ui.item
 
-import com.haeseong.nplusone.domain.item.DiscountType
 import com.haeseong.nplusone.domain.item.ItemQueryVo
 import com.haeseong.nplusone.domain.item.ItemService
-import com.haeseong.nplusone.domain.item.StoreType
 import com.haeseong.nplusone.ui.ApiResponse
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -17,16 +15,14 @@ class ItemController(
 ) {
     @GetMapping
     fun getItems(
-        @RequestParam(required = false) discountType: DiscountType?,
-        @RequestParam(required = false) storeType: StoreType?,
-        @RequestParam(required = false, defaultValue = "0") offsetId: Long,
-        @RequestParam(required = false, defaultValue = "20") pageSize: Int,
+        @ModelAttribute itemQueryRequest: ItemQueryRequest,
     ): ApiResponse<List<ItemResponse>> {
         val itemQueryVo = ItemQueryVo(
-            discountType = discountType,
-            storeType = storeType,
-            offsetId = offsetId,
-            pageSize = pageSize,
+            name = itemQueryRequest.name,
+            discountType = itemQueryRequest.discountType,
+            storeType = itemQueryRequest.storeType,
+            offsetId = itemQueryRequest.offsetId,
+            pageSize = itemQueryRequest.pageSize,
         )
         val itemResponseSlice = itemService.getItems(itemQueryVo = itemQueryVo)
             .map {

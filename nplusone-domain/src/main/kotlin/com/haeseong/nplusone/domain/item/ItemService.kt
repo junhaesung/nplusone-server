@@ -30,7 +30,8 @@ class ItemServiceImpl(
         val storeTypes = itemQueryVo.storeType?.run { listOf(this) }
             ?: StoreType.values().toList()
         val validDate = configService.getReferenceDate()
-        return itemRepository.findByDiscountTypeInAndStoreTypeInAndReferenceDateAndItemIdGreaterThan(
+        return itemRepository.findByNameContainsAndDiscountTypeInAndStoreTypeInAndReferenceDateAndItemIdGreaterThan(
+            name = itemQueryVo.name ?: "",
             discountTypes = discountTypes,
             storeTypes = storeTypes,
             referenceDate = validDate,
