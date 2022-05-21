@@ -2,6 +2,7 @@ package com.haeseong.nplusone.job.collector.emart24
 
 import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
 import com.haeseong.nplusone.infrastructure.BatchConfig
+import com.haeseong.nplusone.job.collector.CollectorService
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
@@ -50,7 +51,7 @@ class Emart24CollectorConfig(
     )
 
     @Bean
-    fun emart24CollectorService(): Emart24CollectorService = Emart24CollectorServiceImpl(
+    fun emart24CollectorService(): CollectorService = Emart24CollectorService(
         scrappingResultService = scrappingResultService,
     )
 

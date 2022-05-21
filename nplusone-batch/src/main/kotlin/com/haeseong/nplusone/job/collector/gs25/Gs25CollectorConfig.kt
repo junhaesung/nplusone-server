@@ -2,6 +2,7 @@ package com.haeseong.nplusone.job.collector.gs25
 
 import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
 import com.haeseong.nplusone.infrastructure.BatchConfig
+import com.haeseong.nplusone.job.collector.CollectorService
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
@@ -50,7 +51,7 @@ class Gs25CollectorConfig(
     )
 
     @Bean
-    fun gs25CollectorService(): Gs25CollectorService = Gs25CollectorServiceImpl(
+    fun gs25CollectorService(): CollectorService = Gs25CollectorService(
         scrappingResultService = scrappingResultService,
     )
 

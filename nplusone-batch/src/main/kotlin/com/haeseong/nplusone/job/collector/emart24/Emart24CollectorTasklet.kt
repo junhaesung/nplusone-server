@@ -1,5 +1,6 @@
 package com.haeseong.nplusone.job.collector.emart24
 
+import com.haeseong.nplusone.job.collector.CollectorService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.batch.core.StepContribution
@@ -8,7 +9,7 @@ import org.springframework.batch.core.step.tasklet.Tasklet
 import org.springframework.batch.repeat.RepeatStatus
 
 class Emart24CollectorTasklet(
-    private val emart24CollectorService: Emart24CollectorService,
+    private val emart24CollectorService: CollectorService,
 ) : Tasklet {
 
     override fun execute(contribution: StepContribution, chunkContext: ChunkContext): RepeatStatus {
