@@ -6,11 +6,22 @@ import org.springframework.batch.core.StepContribution
 import org.springframework.batch.core.scope.context.ChunkContext
 import org.springframework.batch.core.step.tasklet.Tasklet
 import org.springframework.batch.repeat.RepeatStatus
+import java.time.LocalDate
 
-class ItemCreatorTasklet : Tasklet {
+class ItemCreatorTasklet(
+    private val itemCreatorService: ItemCreatorService,
+) : Tasklet {
     override fun execute(contribution: StepContribution, chunkContext: ChunkContext): RepeatStatus {
-        log.info("hello item creator tasklet")
+        val referenceDate = resolveReferenceDate(chunkContext = chunkContext)
+        log.info("referenceDate: $referenceDate")
+        itemCreatorService.createItems(referenceDate = referenceDate)
         return RepeatStatus.FINISHED
+    }
+
+    private fun resolveReferenceDate(chunkContext: ChunkContext): LocalDate {
+        return chunkContext.stepContext.jobParameters["referenceDate"]?.toString()
+            ?.let { LocalDate.parse(it) }
+            ?: LocalDate.now()
     }
 
     companion object {

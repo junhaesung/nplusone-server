@@ -1,5 +1,7 @@
 package com.haeseong.nplusone.job.item
 
+import com.haeseong.nplusone.domain.item.ItemService
+import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
 import com.haeseong.nplusone.infrastructure.BatchConfig
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
@@ -23,6 +25,8 @@ class ItemCreatorJobConfig(
     private val jobBuilderFactory: JobBuilderFactory,
     private val jobRepository: JobRepository,
     private val stepBuilderFactory: StepBuilderFactory,
+    private val scrappingResultService: ScrappingResultService,
+    private val itemService: ItemService,
 ) {
     @Bean
     fun itemCreatorJob(): Job {
@@ -43,7 +47,15 @@ class ItemCreatorJobConfig(
 
     @Bean
     @StepScope
-    fun itemCreatorTasklet(): Tasklet = ItemCreatorTasklet()
+    fun itemCreatorTasklet(): Tasklet = ItemCreatorTasklet(
+        itemCreatorService = itemCreatorService()
+    )
+
+    @Bean
+    fun itemCreatorService(): ItemCreatorService = ItemCreatorServiceImpl(
+        scrappingResultService = scrappingResultService,
+        itemService = itemService,
+    )
 
     companion object {
         const val JOB_NAME = "item-creator-job"
