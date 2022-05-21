@@ -9,6 +9,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.JobScope
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepScope
+import org.springframework.batch.core.launch.support.RunIdIncrementer
 import org.springframework.batch.core.repository.JobRepository
 import org.springframework.batch.core.step.tasklet.Tasklet
 import org.springframework.batch.support.transaction.ResourcelessTransactionManager
@@ -32,6 +33,7 @@ class Gs25CollectorConfig(
         return jobBuilderFactory[JOB_NAME]
             .repository(jobRepository)
             .start(gs25CollectorStep())
+            .incrementer(RunIdIncrementer())
             .build()
     }
 
