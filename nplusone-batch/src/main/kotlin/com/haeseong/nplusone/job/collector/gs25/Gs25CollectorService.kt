@@ -125,7 +125,7 @@ class Gs25CollectorServiceImpl(
     }
 
     companion object {
-        val log : Logger = LoggerFactory.getLogger(Gs25CollectorServiceImpl::class.java)
+        private val log : Logger = LoggerFactory.getLogger(Gs25CollectorServiceImpl::class.java)
         const val NO_IMAGE_URL = "http://gs25.gsretail.com/_ui/desktop/common/images/gscvs/products/prd_no_img.gif"
     }
 
