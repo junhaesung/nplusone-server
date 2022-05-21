@@ -1,4 +1,4 @@
-package com.haeseong.nplusone.job.item
+package com.haeseong.nplusone.job.item.creator
 
 import com.haeseong.nplusone.domain.item.ItemService
 import com.haeseong.nplusone.domain.scrapping.ScrappingResultService

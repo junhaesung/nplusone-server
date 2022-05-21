@@ -1,5 +1,6 @@
-package com.haeseong.nplusone.job.item
+package com.haeseong.nplusone.job.item.creator
 
+import com.haeseong.nplusone.domain.item.StoreType
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.batch.core.StepContribution
@@ -13,15 +14,24 @@ class ItemCreatorTasklet(
 ) : Tasklet {
     override fun execute(contribution: StepContribution, chunkContext: ChunkContext): RepeatStatus {
         val referenceDate = resolveReferenceDate(chunkContext = chunkContext)
-        log.info("referenceDate: $referenceDate")
-        itemCreatorService.createItems(referenceDate = referenceDate)
+        val storeType = resolveStoreType(chunkContext = chunkContext)
+        itemCreatorService.createItems(referenceDate = referenceDate, storeType = storeType)
         return RepeatStatus.FINISHED
     }
 
     private fun resolveReferenceDate(chunkContext: ChunkContext): LocalDate {
-        return chunkContext.stepContext.jobParameters["referenceDate"]?.toString()
+        val referenceDate = chunkContext.stepContext.jobParameters["referenceDate"]?.toString()
             ?.let { LocalDate.parse(it) }
             ?: LocalDate.now()
+        log.info("referenceDate: $referenceDate")
+        return referenceDate
+    }
+
+    private fun resolveStoreType(chunkContext: ChunkContext): StoreType? {
+        val storeType = chunkContext.stepContext.jobParameters["storeType"]?.toString()
+            ?.let { StoreType.valueOf(it) }
+        log.info("storeType: $storeType")
+        return storeType
     }
 
     companion object {

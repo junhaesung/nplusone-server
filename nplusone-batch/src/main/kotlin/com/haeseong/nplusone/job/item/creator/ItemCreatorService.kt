@@ -1,9 +1,6 @@
-package com.haeseong.nplusone.job.item
+package com.haeseong.nplusone.job.item.creator
 
-import com.haeseong.nplusone.domain.item.ItemCreateVo
-import com.haeseong.nplusone.domain.item.ItemQueryVo
-import com.haeseong.nplusone.domain.item.ItemService
-import com.haeseong.nplusone.domain.item.ItemVo
+import com.haeseong.nplusone.domain.item.*
 import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
 import com.haeseong.nplusone.domain.scrapping.ScrappingResultVo
 import org.slf4j.Logger
@@ -12,18 +9,18 @@ import org.springframework.data.domain.Slice
 import java.time.LocalDate
 
 interface ItemCreatorService {
-    fun createItems(referenceDate: LocalDate): List<ItemVo>
+    fun createItems(referenceDate: LocalDate, storeType: StoreType? = null): List<ItemVo>
 }
 
 class ItemCreatorServiceImpl(
     private val scrappingResultService: ScrappingResultService,
     private val itemService: ItemService,
 ) : ItemCreatorService {
-    override fun createItems(referenceDate: LocalDate): List<ItemVo> {
+    override fun createItems(referenceDate: LocalDate, storeType: StoreType?): List<ItemVo> {
         var offsetScrappingResultId = 0L
         val createdItems = mutableListOf<ItemVo>()
         while (true) {
-            val results = getScrappingResults(offsetScrappingResultId)
+            val results = getScrappingResults(storeType, offsetScrappingResultId)
             if (results.isEmpty) {
                 break
             }
@@ -34,12 +31,12 @@ class ItemCreatorServiceImpl(
         return createdItems
     }
 
-    private fun getScrappingResults(offsetScrappingResultId: Long): Slice<ScrappingResultVo> {
+    private fun getScrappingResults(storeType: StoreType?, offsetScrappingResultId: Long): Slice<ScrappingResultVo> {
         return scrappingResultService.getItems(
             ItemQueryVo(
                 name = null,
                 discountType = null,
-                storeType = null,
+                storeType = storeType,
                 offsetId = offsetScrappingResultId,
                 pageSize = 100
             )
