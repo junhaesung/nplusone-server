@@ -143,6 +143,6 @@ class Emart24CollectorServiceImpl(
     }
 
     companion object {
-        val log: Logger = LoggerFactory.getLogger(Emart24CollectorServiceImpl::class.java)
+        private val log: Logger = LoggerFactory.getLogger(Emart24CollectorServiceImpl::class.java)
     }
 }

@@ -99,6 +99,6 @@ class CuCollectorServiceImpl(
     }
 
     companion object {
-        val log: Logger = LoggerFactory.getLogger(CuCollectorServiceImpl::class.java)
+        private val log: Logger = LoggerFactory.getLogger(CuCollectorServiceImpl::class.java)
     }
 }
