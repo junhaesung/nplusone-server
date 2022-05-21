@@ -2,6 +2,7 @@ package com.haeseong.nplusone.job.collector.seveneleven
 
 import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
 import com.haeseong.nplusone.infrastructure.BatchConfig
+import com.haeseong.nplusone.job.collector.CollectorService
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
@@ -50,7 +51,7 @@ class SevenElevenCollectorConfig(
     )
 
     @Bean
-    fun sevenElevenCollectorService(): SevenElevenCollectorService = SevenElevenCollectorServiceImpl(
+    fun sevenElevenCollectorService(): CollectorService = SevenElevenCollectorService(
         scrappingResultService = scrappingResultService,
     )
 

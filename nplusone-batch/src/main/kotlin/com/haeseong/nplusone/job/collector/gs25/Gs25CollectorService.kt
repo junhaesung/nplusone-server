@@ -5,8 +5,8 @@ import com.haeseong.nplusone.domain.item.ItemDuplicatedException
 import com.haeseong.nplusone.domain.item.StoreType
 import com.haeseong.nplusone.domain.scrapping.ScrappingResultCreateVo
 import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
+import com.haeseong.nplusone.job.collector.CollectorService
 import com.haeseong.nplusone.job.collector.DiscountedItem
-import com.haeseong.nplusone.job.collector.DiscountedItemValidator
 import io.github.bonigarcia.wdm.WebDriverManager
 import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
@@ -18,14 +18,9 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 
-interface Gs25CollectorService : DiscountedItemValidator {
-    fun getDiscountedItems(): List<DiscountedItem>
-    fun saveAll(discountedItems: List<DiscountedItem>)
-}
-
-class Gs25CollectorServiceImpl(
+class Gs25CollectorService(
     private val scrappingResultService: ScrappingResultService,
-) : Gs25CollectorService {
+) : CollectorService {
     override fun getDiscountedItems(): List<DiscountedItem> {
         WebDriverManager.chromedriver().setup()
         val chromeOptions = ChromeOptions()
@@ -125,7 +120,7 @@ class Gs25CollectorServiceImpl(
     }
 
     companion object {
-        private val log : Logger = LoggerFactory.getLogger(Gs25CollectorServiceImpl::class.java)
+        private val log : Logger = LoggerFactory.getLogger(Gs25CollectorService::class.java)
         const val NO_IMAGE_URL = "http://gs25.gsretail.com/_ui/desktop/common/images/gscvs/products/prd_no_img.gif"
     }
 

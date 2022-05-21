@@ -5,8 +5,8 @@ import com.haeseong.nplusone.domain.item.ItemDuplicatedException
 import com.haeseong.nplusone.domain.item.StoreType
 import com.haeseong.nplusone.domain.scrapping.ScrappingResultCreateVo
 import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
+import com.haeseong.nplusone.job.collector.CollectorService
 import com.haeseong.nplusone.job.collector.DiscountedItem
-import com.haeseong.nplusone.job.collector.DiscountedItemValidator
 import io.github.bonigarcia.wdm.WebDriverManager
 import org.openqa.selenium.By
 import org.openqa.selenium.chrome.ChromeDriver
@@ -17,14 +17,9 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 
-interface Emart24CollectorService : DiscountedItemValidator {
-    fun getDiscountedItems(): List<DiscountedItem>
-    fun saveAll(discountedItems: List<DiscountedItem>)
-}
-
-class Emart24CollectorServiceImpl(
+class Emart24CollectorService(
     private val scrappingResultService: ScrappingResultService,
-) : Emart24CollectorService {
+) : CollectorService {
     override fun getDiscountedItems(): List<DiscountedItem> {
         return getOnePlusOneItems() + getTwoPlusOneItems()
     }
@@ -143,6 +138,6 @@ class Emart24CollectorServiceImpl(
     }
 
     companion object {
-        private val log: Logger = LoggerFactory.getLogger(Emart24CollectorServiceImpl::class.java)
+        private val log: Logger = LoggerFactory.getLogger(Emart24CollectorService::class.java)
     }
 }
