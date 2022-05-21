@@ -8,12 +8,12 @@ import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.haeseong.nplusone.domain.item.DiscountType
-import com.haeseong.nplusone.domain.item.ItemCreateVo
 import com.haeseong.nplusone.domain.item.ItemService
 import com.haeseong.nplusone.domain.item.StoreType
+import com.haeseong.nplusone.domain.scrapping.ScrappingResultCreateVo
+import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
 import com.haeseong.nplusone.ui.ApiResponse
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -35,6 +35,9 @@ class ItemControllerTest {
 
     @Autowired
     lateinit var itemService: ItemService
+
+    @Autowired
+    lateinit var scrappingResultService: ScrappingResultService
 
     val objectMapper: ObjectMapper = jsonMapper {
         addModule(kotlinModule())
@@ -60,7 +63,7 @@ class ItemControllerTest {
     fun getItems_queryByName() {
         // given
         val name = "name"
-        itemService.create(ItemCreateVo(
+        scrappingResultService.create(ScrappingResultCreateVo(
             name = name,
             price = BigDecimal.valueOf(10000),
             imageUrl = "imageUrl",
@@ -68,7 +71,7 @@ class ItemControllerTest {
             storeType = StoreType.GS25,
             referenceDate = LocalDate.now(),
         ))
-        itemService.create(ItemCreateVo(
+        scrappingResultService.create(ScrappingResultCreateVo(
             name = "anotherName",
             price = BigDecimal.valueOf(20000),
             imageUrl = "imageUrl",

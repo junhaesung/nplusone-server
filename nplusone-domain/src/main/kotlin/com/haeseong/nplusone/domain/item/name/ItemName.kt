@@ -1,53 +1,34 @@
-package com.haeseong.nplusone.domain.item
+package com.haeseong.nplusone.domain.item.name
 
+import com.haeseong.nplusone.domain.item.Item
+import com.haeseong.nplusone.domain.item.StoreType
 import org.hibernate.annotations.GenericGenerator
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
-import java.math.BigDecimal
 import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
-class Item(
+class ItemName(
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
     @GenericGenerator(
         name = "SnowflakeIdGenerator",
         strategy = "com.haeseong.nplusone.infrastructure.generator.SnowflakeIdGenerator",
     )
-    val itemId: Long = 0L,
+    val itemNameId: Long = 0L,
+    @ManyToOne
+    @JoinColumn(name = "itemId")
+    val item: Item,
     val name: String,
-    val price: BigDecimal,
+    @Enumerated(EnumType.STRING)
+    val storeType: StoreType,
 ) {
     @CreatedDate
     lateinit var createdAt: LocalDateTime
 
     @LastModifiedDate
     lateinit var updatedAt: LocalDateTime
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Item
-
-        if (itemId != other.itemId) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return itemId.hashCode()
-    }
-
-    companion object {
-        fun from(itemCreateVo: ItemCreateVo): Item {
-            return Item(
-                name = itemCreateVo.name,
-                price = itemCreateVo.price,
-            )
-        }
-    }
 }

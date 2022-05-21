@@ -1,6 +1,7 @@
 package com.haeseong.nplusone.domain
 
 import com.haeseong.nplusone.domain.item.*
+import com.haeseong.nplusone.domain.scrapping.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.DisplayName
@@ -13,18 +14,18 @@ import java.time.LocalDate
 
 @Transactional
 @SpringBootTest
-class ItemServiceImplTest {
+class ScrappingResultServiceTest {
     @Autowired
-    lateinit var sut: ItemService
+    lateinit var sut: ScrappingResultService
 
     @Autowired
-    lateinit var itemRepository: ItemRepository
+    lateinit var scrappingResultRepository: ScrappingResultRepository
 
     @DisplayName("create: 성공")
     @Test
     fun create() {
         // given
-        val itemCreateVo = ItemCreateVo(
+        val scrappingResultCreateVo = ScrappingResultCreateVo(
             name = "name",
             price = BigDecimal.valueOf(5000),
             imageUrl = "imageUrl",
@@ -33,7 +34,7 @@ class ItemServiceImplTest {
             referenceDate = LocalDate.now(),
         )
         // when
-        val actual = sut.create(itemCreateVo = itemCreateVo)
+        val actual = sut.create(scrappingResultCreateVo = scrappingResultCreateVo)
         // then
         assertEquals("name", actual.name)
         assertEquals(BigDecimal.valueOf(5000), actual.price)
@@ -47,7 +48,7 @@ class ItemServiceImplTest {
     @Test
     fun create_duplicated() {
         val referenceDate = LocalDate.of(2022, 5, 8)
-        itemRepository.saveAndFlush(Item(
+        scrappingResultRepository.saveAndFlush(ScrappingResult(
             name = "name",
             price = BigDecimal.valueOf(5000),
             imageUrl = null,
@@ -55,8 +56,8 @@ class ItemServiceImplTest {
             storeType = StoreType.CU,
             referenceDate = referenceDate,
         ))
-        assertThrows(ItemDuplicatedException::class.java) {
-            sut.create(itemCreateVo = ItemCreateVo(
+        assertThrows(ScrappingResultDuplicatedException::class.java) {
+            sut.create(scrappingResultCreateVo = ScrappingResultCreateVo(
                 name = "name",
                 price = BigDecimal.valueOf(5000),
                 imageUrl = "imageUrl",
@@ -72,7 +73,7 @@ class ItemServiceImplTest {
     fun create_another_day() {
         // given
         val referenceDate = LocalDate.of(2022, 5, 8)
-        itemRepository.saveAndFlush(Item(
+        scrappingResultRepository.saveAndFlush(ScrappingResult(
             name = "name",
             price = BigDecimal.valueOf(5000),
             imageUrl = null,
@@ -81,7 +82,7 @@ class ItemServiceImplTest {
             referenceDate = referenceDate,
         ))
         // when
-        val actual = sut.create(itemCreateVo = ItemCreateVo(
+        val actual = sut.create(scrappingResultCreateVo = ScrappingResultCreateVo(
             name = "name",
             price = BigDecimal.valueOf(5000),
             imageUrl = "imageUrl",
