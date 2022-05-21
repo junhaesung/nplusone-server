@@ -23,5 +23,5 @@ interface ScrappingResultRepository : JpaRepository<ScrappingResult, Long> {
         referenceDate: LocalDate = LocalDate.now(),
         offsetId: Long,
         pageable: Pageable = Pageable.ofSize(20),
-    ): Slice<Item>
+    ): Slice<ScrappingResult>
 }

@@ -1,6 +1,6 @@
 package com.haeseong.nplusone.domain.item
 
-import com.haeseong.nplusone.domain.config.ConfigService
+import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -14,7 +14,7 @@ interface ItemService {
 @Service
 class ItemServiceImpl(
     private val itemRepository: ItemRepository,
-    private val configService: ConfigService,
+    private val scrappingResultService: ScrappingResultService,
 ) : ItemService {
 
     @Transactional
@@ -34,18 +34,7 @@ class ItemServiceImpl(
     }
 
     override fun getItems(itemQueryVo: ItemQueryVo): Slice<ItemVo> {
-        val discountTypes = itemQueryVo.discountType?.run { listOf(this) }
-            ?: listOf(DiscountType.ONE_PLUS_ONE, DiscountType.TWO_PLUS_ONE)
-        val storeTypes = itemQueryVo.storeType?.run { listOf(this) }
-            ?: StoreType.values().toList()
-        val validDate = configService.getReferenceDate()
-        return itemRepository.findByNameContainsAndDiscountTypeInAndStoreTypeInAndReferenceDateAndItemIdGreaterThan(
-            name = itemQueryVo.name ?: "",
-            discountTypes = discountTypes,
-            storeTypes = storeTypes,
-            referenceDate = validDate,
-            offsetId = itemQueryVo.offsetId
-        ).map { ItemVo.from(it) }
+        return scrappingResultService.getItems(itemQueryVo = itemQueryVo)
     }
 
 }
