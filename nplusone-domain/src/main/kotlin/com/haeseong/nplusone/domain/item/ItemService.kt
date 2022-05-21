@@ -4,8 +4,6 @@ import com.haeseong.nplusone.domain.item.image.ItemImage
 import com.haeseong.nplusone.domain.item.image.ItemImageRepository
 import com.haeseong.nplusone.domain.item.name.ItemName
 import com.haeseong.nplusone.domain.item.name.ItemNameRepository
-import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
-import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -23,15 +21,16 @@ class ItemServiceImpl(
 
     @Transactional
     override fun create(itemCreateVo: ItemCreateVo): ItemVo {
-        val createdItem = createItem(itemCreateVo = itemCreateVo)
-        createItemName(itemCreateVo = itemCreateVo, createdItem = createdItem)
-        createItemImage(itemCreateVo = itemCreateVo, createdItem = createdItem)
-        return ItemVo.from(item = createdItem)
+        val item = getOrCreateItem(itemCreateVo = itemCreateVo)
+        createItemName(itemCreateVo = itemCreateVo, item = item)
+        createItemImage(itemCreateVo = itemCreateVo, item = item)
+        return ItemVo.from(item = item)
     }
 
-    private fun createItem(itemCreateVo: ItemCreateVo): Item {
-        if (itemRepository.existsByName(name = itemCreateVo.name)) {
-            throw ItemDuplicatedException(message = "'name' is already used. itemCreateVo:$itemCreateVo")
+    private fun getOrCreateItem(itemCreateVo: ItemCreateVo): Item {
+        val item = itemRepository.findByName(name = itemCreateVo.name)
+        if (item != null) {
+            return item
         }
         return itemRepository.save(
             Item(
@@ -41,7 +40,7 @@ class ItemServiceImpl(
         )
     }
 
-    private fun createItemName(itemCreateVo: ItemCreateVo, createdItem: Item) {
+    private fun createItemName(itemCreateVo: ItemCreateVo, item: Item) {
         val existsByImageUrlAndStoreType = itemImageRepository.existsByImageUrlAndStoreType(
             imageUrl = itemCreateVo.imageUrl,
             storeType = itemCreateVo.storeType,
@@ -51,14 +50,14 @@ class ItemServiceImpl(
         }
         itemNameRepository.save(
             ItemName(
-                item = createdItem,
+                item = item,
                 name = itemCreateVo.name,
                 storeType = itemCreateVo.storeType,
             )
         )
     }
 
-    private fun createItemImage(itemCreateVo: ItemCreateVo, createdItem: Item) {
+    private fun createItemImage(itemCreateVo: ItemCreateVo, item: Item) {
         val existsByImageUrlAndStoreType = itemImageRepository.existsByImageUrlAndStoreType(
             imageUrl = itemCreateVo.imageUrl,
             storeType = itemCreateVo.storeType,
@@ -68,7 +67,7 @@ class ItemServiceImpl(
         }
         itemImageRepository.save(
             ItemImage(
-                item = createdItem,
+                item = item,
                 imageUrl = itemCreateVo.imageUrl,
                 storeType = itemCreateVo.storeType,
             )
