@@ -1,5 +1,9 @@
 package com.haeseong.nplusone.domain.item
 
+import com.haeseong.nplusone.domain.item.image.ItemImage
+import com.haeseong.nplusone.domain.item.image.ItemImageRepository
+import com.haeseong.nplusone.domain.item.name.ItemName
+import com.haeseong.nplusone.domain.item.name.ItemNameRepository
 import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
@@ -14,23 +18,63 @@ interface ItemService {
 @Service
 class ItemServiceImpl(
     private val itemRepository: ItemRepository,
+    private val itemNameRepository: ItemNameRepository,
+    private val itemImageRepository: ItemImageRepository,
     private val scrappingResultService: ScrappingResultService,
 ) : ItemService {
 
     @Transactional
     override fun create(itemCreateVo: ItemCreateVo): ItemVo {
-        val item = Item.from(itemCreateVo = itemCreateVo)
-        if (itemRepository.existsByReferenceDateAndNameAndStoreTypeAndDiscountType(
-                referenceDate = itemCreateVo.referenceDate,
+        val createdItem = createItem(itemCreateVo = itemCreateVo)
+        createItemName(itemCreateVo = itemCreateVo, createdItem = createdItem)
+        createItemImage(itemCreateVo = itemCreateVo, createdItem = createdItem)
+        return ItemVo.from(item = createdItem)
+    }
+
+    private fun createItem(itemCreateVo: ItemCreateVo): Item {
+        if (itemRepository.existsByName(name = itemCreateVo.name)) {
+            throw ItemDuplicatedException(message = "'name' is already used. itemCreateVo:$itemCreateVo")
+        }
+        return itemRepository.save(
+            Item(
+                name = itemCreateVo.name,
+                price = itemCreateVo.price,
+            )
+        )
+    }
+
+    private fun createItemName(itemCreateVo: ItemCreateVo, createdItem: Item) {
+        val existsByImageUrlAndStoreType = itemImageRepository.existsByImageUrlAndStoreType(
+            imageUrl = itemCreateVo.imageUrl,
+            storeType = itemCreateVo.storeType,
+        )
+        if (existsByImageUrlAndStoreType) {
+            return
+        }
+        itemNameRepository.save(
+            ItemName(
+                item = createdItem,
                 name = itemCreateVo.name,
                 storeType = itemCreateVo.storeType,
-                discountType = itemCreateVo.discountType,
             )
-        ) {
-            throw ItemDuplicatedException()
+        )
+    }
+
+    private fun createItemImage(itemCreateVo: ItemCreateVo, createdItem: Item) {
+        val existsByImageUrlAndStoreType = itemImageRepository.existsByImageUrlAndStoreType(
+            imageUrl = itemCreateVo.imageUrl,
+            storeType = itemCreateVo.storeType,
+        )
+        if (existsByImageUrlAndStoreType) {
+            return
         }
-        return itemRepository.save(item)
-            .run { ItemVo.from(this) }
+        itemImageRepository.save(
+            ItemImage(
+                item = createdItem,
+                imageUrl = itemCreateVo.imageUrl,
+                storeType = itemCreateVo.storeType,
+            )
+        )
     }
 
     override fun getItems(itemQueryVo: ItemQueryVo): Slice<ItemVo> {
