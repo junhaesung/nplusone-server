@@ -1,7 +1,7 @@
 package com.haeseong.nplusone.job.collector.seveneleven
 
+import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
 import com.haeseong.nplusone.infrastructure.BatchConfig
-import com.haeseong.nplusone.job.collector.ministop.MinistopCollectorConfig
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
@@ -9,6 +9,7 @@ import org.springframework.batch.core.configuration.annotation.JobScope
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepScope
 import org.springframework.batch.core.repository.JobRepository
+import org.springframework.batch.core.step.tasklet.Tasklet
 import org.springframework.batch.support.transaction.ResourcelessTransactionManager
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
@@ -23,6 +24,7 @@ class SevenElevenCollectorConfig(
     private val jobBuilderFactory: JobBuilderFactory,
     private val jobRepository: JobRepository,
     private val stepBuilderFactory: StepBuilderFactory,
+    private val scrappingResultService: ScrappingResultService,
 ) {
     @Bean
     fun sevenElevenCollectorJob(): Job {
@@ -43,7 +45,14 @@ class SevenElevenCollectorConfig(
 
     @Bean
     @StepScope
-    fun sevenElevenCollectorTasklet() = SevenElevenCollectorTasklet()
+    fun sevenElevenCollectorTasklet(): Tasklet = SevenElevenCollectorTasklet(
+        sevenElevenCollectorService = sevenElevenCollectorService(),
+    )
+
+    @Bean
+    fun sevenElevenCollectorService(): SevenElevenCollectorService = SevenElevenCollectorServiceImpl(
+        scrappingResultService = scrappingResultService,
+    )
 
     companion object {
         const val JOB_NAME = "seven-eleven-collector-job"
