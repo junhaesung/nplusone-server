@@ -1,10 +1,7 @@
 package com.haeseong.nplusone.domain
 
 import com.haeseong.nplusone.domain.item.*
-import com.haeseong.nplusone.domain.scrapping.ScrappingResult
-import com.haeseong.nplusone.domain.scrapping.ScrappingResultCreateVo
-import com.haeseong.nplusone.domain.scrapping.ScrappingResultRepository
-import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
+import com.haeseong.nplusone.domain.scrapping.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.DisplayName
@@ -59,7 +56,7 @@ class ScrappingResultServiceTest {
             storeType = StoreType.CU,
             referenceDate = referenceDate,
         ))
-        assertThrows(ItemDuplicatedException::class.java) {
+        assertThrows(ScrappingResultDuplicatedException::class.java) {
             sut.create(scrappingResultCreateVo = ScrappingResultCreateVo(
                 name = "name",
                 price = BigDecimal.valueOf(5000),
