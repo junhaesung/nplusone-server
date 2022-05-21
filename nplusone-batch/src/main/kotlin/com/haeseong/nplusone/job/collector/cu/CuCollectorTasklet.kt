@@ -1,6 +1,9 @@
 package com.haeseong.nplusone.job.collector.cu
 
 import com.haeseong.nplusone.domain.item.*
+import com.haeseong.nplusone.domain.scrapping.ScrappingResultCreateVo
+import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
+import com.haeseong.nplusone.domain.scrapping.ScrappingResultVo
 import com.haeseong.nplusone.job.collector.DiscountedItem
 import com.haeseong.nplusone.job.collector.DiscountedItemValidator
 import io.github.bonigarcia.wdm.WebDriverManager
@@ -24,7 +27,7 @@ import java.util.concurrent.TimeUnit
 
 open class CuCollectorTasklet : Tasklet, DiscountedItemValidator {
     @Autowired
-    lateinit var itemService: ItemService
+    lateinit var ScrappingResultService: ScrappingResultService
 
     override fun execute(contribution: StepContribution, chunkContext: ChunkContext): RepeatStatus {
         val discountedItems = getDiscountedItems()
@@ -85,8 +88,8 @@ open class CuCollectorTasklet : Tasklet, DiscountedItemValidator {
         val now = LocalDate.now()
         discountedItems.forEach {
             try {
-                itemService.create(
-                    itemCreateVo = ItemCreateVo(
+                ScrappingResultService.create(
+                    scrappingResultCreateVo = ScrappingResultCreateVo(
                         name = it.name ?: "",
                         price = it.price ?: BigDecimal.ZERO,
                         imageUrl = it.imageUrl,

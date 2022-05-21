@@ -1,6 +1,8 @@
 package com.haeseong.nplusone.job.collector.emart24
 
 import com.haeseong.nplusone.domain.item.*
+import com.haeseong.nplusone.domain.scrapping.ScrappingResultCreateVo
+import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
 import com.haeseong.nplusone.job.collector.DiscountedItem
 import com.haeseong.nplusone.job.collector.DiscountedItemValidator
 import io.github.bonigarcia.wdm.WebDriverManager
@@ -21,7 +23,7 @@ import java.util.concurrent.TimeUnit
 
 open class Emart24CollectorTasklet : Tasklet, DiscountedItemValidator {
     @Autowired
-    lateinit var itemService: ItemService
+    lateinit var scrappingResultService: ScrappingResultService
 
     override fun execute(contribution: StepContribution, chunkContext: ChunkContext): RepeatStatus {
         val discountedItems = getDiscountedItems()
@@ -131,8 +133,8 @@ open class Emart24CollectorTasklet : Tasklet, DiscountedItemValidator {
         val now = LocalDate.now()
         discountedItems.forEach {
             try {
-                itemService.create(
-                    itemCreateVo = ItemCreateVo(
+                scrappingResultService.create(
+                    scrappingResultCreateVo = ScrappingResultCreateVo(
                         name = it.name ?: "",
                         price = it.price ?: BigDecimal.ZERO,
                         imageUrl = it.imageUrl,

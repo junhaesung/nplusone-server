@@ -1,5 +1,7 @@
-package com.haeseong.nplusone.domain.item
+package com.haeseong.nplusone.domain.scrapping
 
+import com.haeseong.nplusone.domain.item.DiscountType
+import com.haeseong.nplusone.domain.item.StoreType
 import org.hibernate.annotations.GenericGenerator
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
@@ -11,14 +13,14 @@ import javax.persistence.*
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
-class Item(
+class ScrappingResult(
     @Id
     @GeneratedValue(generator = "SnowflakeIdGenerator")
     @GenericGenerator(
         name = "SnowflakeIdGenerator",
         strategy = "com.haeseong.nplusone.infrastructure.generator.SnowflakeIdGenerator",
     )
-    val itemId: Long = 0L,
+    val scrappingResultId: Long = 0L,
     val name: String,
     val price: BigDecimal,
     val imageUrl: String?,
@@ -38,27 +40,25 @@ class Item(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Item
+        other as ScrappingResult
 
-        if (itemId != other.itemId) return false
+        if (scrappingResultId != other.scrappingResultId) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        return itemId.hashCode()
+        return scrappingResultId.hashCode()
     }
 
     companion object {
-        fun from(itemCreateVo: ItemCreateVo): Item {
-            return Item(
-                name = itemCreateVo.name,
-                price = itemCreateVo.price,
-                imageUrl = itemCreateVo.imageUrl,
-                discountType = itemCreateVo.discountType,
-                storeType = itemCreateVo.storeType,
-                referenceDate = itemCreateVo.referenceDate,
-            )
-        }
+        fun from(scrappingResultCreateVo: ScrappingResultCreateVo) = ScrappingResult(
+            name = scrappingResultCreateVo.name,
+            price = scrappingResultCreateVo.price,
+            imageUrl = scrappingResultCreateVo.imageUrl,
+            discountType = scrappingResultCreateVo.discountType,
+            storeType = scrappingResultCreateVo.storeType,
+            referenceDate = scrappingResultCreateVo.referenceDate,
+        )
     }
 }
