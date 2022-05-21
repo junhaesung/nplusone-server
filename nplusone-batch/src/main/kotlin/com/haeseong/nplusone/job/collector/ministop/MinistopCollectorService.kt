@@ -69,7 +69,7 @@ class MinistopCollectorService(
 
                 sequence += 1
             }
-            log.info("items(1+1): $items")
+            log.info("items(1+1).size: ${items.size}")
             return items
         } finally {
             // End the session
@@ -121,7 +121,7 @@ class MinistopCollectorService(
 
                 sequence += 1
             }
-            log.info("items(2+1): $items")
+            log.info("items(2+1).size: ${items.size}")
             return items
         } finally {
             // End the session
