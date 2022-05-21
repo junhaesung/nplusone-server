@@ -1,5 +1,6 @@
 package com.haeseong.nplusone.job.collector.cu
 
+import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
 import com.haeseong.nplusone.infrastructure.BatchConfig
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
@@ -22,6 +23,7 @@ class CuCollectorConfig(
     private val jobBuilderFactory: JobBuilderFactory,
     private val jobRepository: JobRepository,
     private val stepBuilderFactory: StepBuilderFactory,
+    private val scrappingResultService: ScrappingResultService
 ) {
     @Bean
     fun cuCollectorJob(): Job {
@@ -42,7 +44,14 @@ class CuCollectorConfig(
 
     @Bean
     @StepScope
-    fun cuCollectorTasklet() = CuCollectorTasklet()
+    fun cuCollectorTasklet() = CuCollectorTasklet(
+        cuCollectorService = cuCollectorService(),
+    )
+
+    @Bean
+    fun cuCollectorService(): CuCollectorService = CuCollectorServiceImpl(
+        scrappingResultService = scrappingResultService,
+    )
 
     companion object {
         const val JOB_NAME = "cu-collector-job"
