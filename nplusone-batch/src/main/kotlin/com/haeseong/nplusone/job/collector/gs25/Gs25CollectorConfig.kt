@@ -1,8 +1,8 @@
 package com.haeseong.nplusone.job.collector.gs25
 
+import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
 import com.haeseong.nplusone.infrastructure.BatchConfig
-import com.haeseong.nplusone.job.collector.cu.CuCollectorConfig
-import com.haeseong.nplusone.job.collector.cu.CuCollectorTasklet
+import com.haeseong.nplusone.job.collector.CollectorService
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
@@ -10,6 +10,7 @@ import org.springframework.batch.core.configuration.annotation.JobScope
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepScope
 import org.springframework.batch.core.repository.JobRepository
+import org.springframework.batch.core.step.tasklet.Tasklet
 import org.springframework.batch.support.transaction.ResourcelessTransactionManager
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
@@ -24,6 +25,7 @@ class Gs25CollectorConfig(
     private val jobBuilderFactory: JobBuilderFactory,
     private val jobRepository: JobRepository,
     private val stepBuilderFactory: StepBuilderFactory,
+    private val scrappingResultService: ScrappingResultService,
 ) {
     @Bean
     fun gs25CollectorJob(): Job {
@@ -44,7 +46,14 @@ class Gs25CollectorConfig(
 
     @Bean
     @StepScope
-    fun gs25CollectorTasklet() = Gs25CollectorTasklet()
+    fun gs25CollectorTasklet(): Tasklet = Gs25CollectorTasklet(
+        gs25CollectorService = gs25CollectorService(),
+    )
+
+    @Bean
+    fun gs25CollectorService(): CollectorService = Gs25CollectorService(
+        scrappingResultService = scrappingResultService,
+    )
 
     companion object {
         const val JOB_NAME = "gs25-collector-job"
