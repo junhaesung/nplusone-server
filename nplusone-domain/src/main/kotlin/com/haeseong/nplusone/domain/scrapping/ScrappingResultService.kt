@@ -3,7 +3,6 @@ package com.haeseong.nplusone.domain.scrapping
 import com.haeseong.nplusone.domain.config.ConfigService
 import com.haeseong.nplusone.domain.item.DiscountType
 import com.haeseong.nplusone.domain.item.ItemQueryVo
-import com.haeseong.nplusone.domain.item.ItemVo
 import com.haeseong.nplusone.domain.item.StoreType
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
@@ -11,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 
 interface ScrappingResultService {
     fun create(scrappingResultCreateVo: ScrappingResultCreateVo): ScrappingResultVo
-    fun getItems(itemQueryVo: ItemQueryVo): Slice<ItemVo>
+    fun getItems(itemQueryVo: ItemQueryVo): Slice<ScrappingResultVo>
 }
 
 @Service
@@ -35,7 +34,7 @@ class ScrappingResultServiceImpl(
             .let { ScrappingResultVo.from(it) }
     }
 
-    override fun getItems(itemQueryVo: ItemQueryVo): Slice<ItemVo> {
+    override fun getItems(itemQueryVo: ItemQueryVo): Slice<ScrappingResultVo> {
         val discountTypes = itemQueryVo.discountType?.run { listOf(this) }
             ?: listOf(DiscountType.ONE_PLUS_ONE, DiscountType.TWO_PLUS_ONE)
         val storeTypes = itemQueryVo.storeType?.run { listOf(this) }
@@ -48,16 +47,5 @@ class ScrappingResultServiceImpl(
             referenceDate = validDate,
             offsetId = itemQueryVo.offsetId
         ).map { ScrappingResultVo.from(it) }
-            .map {
-                ItemVo(
-                    itemId = it.scrappingResultId,
-                    name = it.name,
-                    price = it.price,
-                    imageUrl = it.imageUrl,
-                    discountType = it.discountType,
-                    storeType = it.storeType,
-                    referenceDate = it.referenceDate,
-                )
-            }
     }
 }

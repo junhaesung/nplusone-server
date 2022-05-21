@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional
 
 interface ItemService {
     fun create(itemCreateVo: ItemCreateVo): ItemVo
-    fun getItems(itemQueryVo: ItemQueryVo): Slice<ItemVo>
 }
 
 @Transactional(readOnly = true)
@@ -20,7 +19,6 @@ class ItemServiceImpl(
     private val itemRepository: ItemRepository,
     private val itemNameRepository: ItemNameRepository,
     private val itemImageRepository: ItemImageRepository,
-    private val scrappingResultService: ScrappingResultService,
 ) : ItemService {
 
     @Transactional
@@ -75,10 +73,6 @@ class ItemServiceImpl(
                 storeType = itemCreateVo.storeType,
             )
         )
-    }
-
-    override fun getItems(itemQueryVo: ItemQueryVo): Slice<ItemVo> {
-        return scrappingResultService.getItems(itemQueryVo = itemQueryVo)
     }
 
 }

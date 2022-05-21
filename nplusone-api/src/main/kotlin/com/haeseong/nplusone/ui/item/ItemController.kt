@@ -2,6 +2,7 @@ package com.haeseong.nplusone.ui.item
 
 import com.haeseong.nplusone.domain.item.ItemQueryVo
 import com.haeseong.nplusone.domain.item.ItemService
+import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
 import com.haeseong.nplusone.ui.ApiResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/items")
 class ItemController(
-    private val itemService: ItemService,
+    private val scrappingResultService: ScrappingResultService,
 ) {
     @GetMapping
     fun getItems(
@@ -24,10 +25,10 @@ class ItemController(
             offsetId = itemQueryRequest.offsetId,
             pageSize = itemQueryRequest.pageSize,
         )
-        val itemResponseSlice = itemService.getItems(itemQueryVo = itemQueryVo)
+        val itemResponseSlice = scrappingResultService.getItems(itemQueryVo = itemQueryVo)
             .map {
                 ItemResponse(
-                    itemId = it.itemId,
+                    itemId = it.scrappingResultId,
                     name = it.name,
                     price = it.price,
                     imageUrl = it.imageUrl,
