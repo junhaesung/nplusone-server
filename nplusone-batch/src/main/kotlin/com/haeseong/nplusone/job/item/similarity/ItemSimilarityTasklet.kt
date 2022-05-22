@@ -1,4 +1,4 @@
-package com.haeseong.nplusone.job.item.merge
+package com.haeseong.nplusone.job.item.similarity
 
 import org.springframework.batch.core.StepContribution
 import org.springframework.batch.core.scope.context.ChunkContext

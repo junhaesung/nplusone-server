@@ -1,4 +1,4 @@
-package com.haeseong.nplusone.job.item.merge
+package com.haeseong.nplusone.job.item.similarity
 
 import com.haeseong.nplusone.domain.item.ItemService
 import com.haeseong.nplusone.domain.item.similarity.ItemSimilarityService

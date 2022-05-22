@@ -1,4 +1,4 @@
-package com.haeseong.nplusone.job.item.merge
+package com.haeseong.nplusone.job.item.similarity
 
 import com.haeseong.nplusone.domain.item.ItemService
 import com.haeseong.nplusone.domain.item.similarity.ItemSimilarityService
@@ -50,17 +50,17 @@ class ItemSimilarityJobConfig(
     @Bean
     @StepScope
     fun itemMergeTasklet(): Tasklet = ItemSimilarityTasklet(
-        itemMergeService = itemMergeService()
+        itemSimilarityFacadeService = itemSimilarityFacadeService()
     )
 
     @Bean
-    fun itemMergeService(): ItemSimilarityFacadeService = ItemSimilarityFacadeServiceImpl(
+    fun itemSimilarityFacadeService(): ItemSimilarityFacadeService = ItemSimilarityFacadeServiceImpl(
         itemService = itemService,
         itemSimilarityService = itemSimilarityService,
     )
 
     companion object {
-        const val JOB_NAME = "item-merge-job"
-        private const val STEP_NAME = "item-merge-step"
+        const val JOB_NAME = "item-similarity-job"
+        private const val STEP_NAME = "item-similarity-step"
     }
 }
