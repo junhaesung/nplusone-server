@@ -5,10 +5,11 @@ import org.springframework.batch.core.scope.context.ChunkContext
 import org.springframework.batch.core.step.tasklet.Tasklet
 import org.springframework.batch.repeat.RepeatStatus
 
-class ItemMergeTasklet(
-    private val itemMergeService: ItemMergeService,
+class ItemSimilarityTasklet(
+    private val itemSimilarityFacadeService: ItemSimilarityFacadeService,
 ): Tasklet {
     override fun execute(contribution: StepContribution, chunkContext: ChunkContext): RepeatStatus {
+        itemSimilarityFacadeService.calculateAllSimilarity()
         return RepeatStatus.FINISHED
     }
 }
