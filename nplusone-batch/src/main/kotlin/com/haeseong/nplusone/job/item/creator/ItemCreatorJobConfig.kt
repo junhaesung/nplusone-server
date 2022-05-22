@@ -1,8 +1,8 @@
-package com.haeseong.nplusone.job.collector.ministop
+package com.haeseong.nplusone.job.item.creator
 
+import com.haeseong.nplusone.domain.item.ItemService
 import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
 import com.haeseong.nplusone.infrastructure.BatchConfig
-import com.haeseong.nplusone.job.collector.CollectorService
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
@@ -19,46 +19,48 @@ import org.springframework.context.annotation.Configuration
 
 @ConditionalOnProperty(
     value = [BatchConfig.SPRING_BATCH_JOB_NAMES],
-    havingValue = MinistopCollectorConfig.JOB_NAME
+    havingValue = ItemCreatorJobConfig.JOB_NAME
 )
 @Configuration
-class MinistopCollectorConfig(
+class ItemCreatorJobConfig(
     private val jobBuilderFactory: JobBuilderFactory,
     private val jobRepository: JobRepository,
     private val stepBuilderFactory: StepBuilderFactory,
     private val scrappingResultService: ScrappingResultService,
+    private val itemService: ItemService,
 ) {
     @Bean
-    fun ministopCollectorJob(): Job {
+    fun itemCreatorJob(): Job {
         return jobBuilderFactory[JOB_NAME]
             .repository(jobRepository)
-            .start(ministopCollectorStep())
+            .start(itemCreatorStep())
             .incrementer(RunIdIncrementer())
             .build()
     }
 
     @Bean
     @JobScope
-    fun ministopCollectorStep(): Step {
+    fun itemCreatorStep(): Step {
         return stepBuilderFactory[STEP_NAME]
-            .tasklet(ministopCollectorTasklet())
+            .tasklet(itemCreatorTasklet())
             .transactionManager(ResourcelessTransactionManager())
             .build()
     }
 
     @Bean
     @StepScope
-    fun ministopCollectorTasklet(): Tasklet = MinistopCollectorTasklet(
-        ministopCollectorService = ministopCollectorService(),
+    fun itemCreatorTasklet(): Tasklet = ItemCreatorTasklet(
+        itemCreatorService = itemCreatorService()
     )
 
     @Bean
-    fun ministopCollectorService(): CollectorService = MinistopCollectorService(
+    fun itemCreatorService(): ItemCreatorService = ItemCreatorServiceImpl(
         scrappingResultService = scrappingResultService,
+        itemService = itemService,
     )
 
     companion object {
-        const val JOB_NAME = "ministop-collector-job"
-        const val STEP_NAME = "ministop-collector-step"
+        const val JOB_NAME = "item-creator-job"
+        private const val STEP_NAME = "item-creator-step"
     }
 }
