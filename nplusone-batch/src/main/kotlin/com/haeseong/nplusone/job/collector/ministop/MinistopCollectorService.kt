@@ -1,9 +1,9 @@
 package com.haeseong.nplusone.job.collector.ministop
 
 import com.haeseong.nplusone.domain.item.DiscountType
-import com.haeseong.nplusone.domain.item.ItemDuplicatedException
 import com.haeseong.nplusone.domain.item.StoreType
 import com.haeseong.nplusone.domain.scrapping.ScrappingResultCreateVo
+import com.haeseong.nplusone.domain.scrapping.ScrappingResultDuplicatedException
 import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
 import com.haeseong.nplusone.job.collector.CollectorService
 import com.haeseong.nplusone.job.collector.DiscountedItem
@@ -69,7 +69,7 @@ class MinistopCollectorService(
 
                 sequence += 1
             }
-            log.info("items(1+1): $items")
+            log.info("items(1+1).size: ${items.size}")
             return items
         } finally {
             // End the session
@@ -121,7 +121,7 @@ class MinistopCollectorService(
 
                 sequence += 1
             }
-            log.info("items(2+1): $items")
+            log.info("items(2+1).size: ${items.size}")
             return items
         } finally {
             // End the session
@@ -143,8 +143,8 @@ class MinistopCollectorService(
                         referenceDate = now,
                     )
                 )
-            } catch (e: ItemDuplicatedException) {
-                MinistopCollectorTasklet.log.warn("Item duplicated", e)
+            } catch (e: ScrappingResultDuplicatedException) {
+                log.warn("scrappingResult is duplicated", e)
             }
         }
     }

@@ -1,8 +1,8 @@
-package com.haeseong.nplusone.job.collector.ministop
+package com.haeseong.nplusone.job.item.merge
 
-import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
+import com.haeseong.nplusone.domain.item.ItemService
+import com.haeseong.nplusone.domain.item.similarity.ItemSimilarityService
 import com.haeseong.nplusone.infrastructure.BatchConfig
-import com.haeseong.nplusone.job.collector.CollectorService
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
@@ -19,46 +19,48 @@ import org.springframework.context.annotation.Configuration
 
 @ConditionalOnProperty(
     value = [BatchConfig.SPRING_BATCH_JOB_NAMES],
-    havingValue = MinistopCollectorConfig.JOB_NAME
+    havingValue = ItemSimilarityJobConfig.JOB_NAME
 )
 @Configuration
-class MinistopCollectorConfig(
+class ItemSimilarityJobConfig(
     private val jobBuilderFactory: JobBuilderFactory,
     private val jobRepository: JobRepository,
     private val stepBuilderFactory: StepBuilderFactory,
-    private val scrappingResultService: ScrappingResultService,
+    private val itemService: ItemService,
+    private val itemSimilarityService: ItemSimilarityService,
 ) {
     @Bean
-    fun ministopCollectorJob(): Job {
+    fun itemSimilarityJob(): Job {
         return jobBuilderFactory[JOB_NAME]
             .repository(jobRepository)
-            .start(ministopCollectorStep())
+            .start(itemSimilarityStep())
             .incrementer(RunIdIncrementer())
             .build()
     }
 
     @Bean
     @JobScope
-    fun ministopCollectorStep(): Step {
+    fun itemSimilarityStep(): Step {
         return stepBuilderFactory[STEP_NAME]
-            .tasklet(ministopCollectorTasklet())
+            .tasklet(itemMergeTasklet())
             .transactionManager(ResourcelessTransactionManager())
             .build()
     }
 
     @Bean
     @StepScope
-    fun ministopCollectorTasklet(): Tasklet = MinistopCollectorTasklet(
-        ministopCollectorService = ministopCollectorService(),
+    fun itemMergeTasklet(): Tasklet = ItemSimilarityTasklet(
+        itemMergeService = itemMergeService()
     )
 
     @Bean
-    fun ministopCollectorService(): CollectorService = MinistopCollectorService(
-        scrappingResultService = scrappingResultService,
+    fun itemMergeService(): ItemSimilarityFacadeService = ItemSimilarityFacadeServiceImpl(
+        itemService = itemService,
+        itemSimilarityService = itemSimilarityService,
     )
 
     companion object {
-        const val JOB_NAME = "ministop-collector-job"
-        const val STEP_NAME = "ministop-collector-step"
+        const val JOB_NAME = "item-merge-job"
+        private const val STEP_NAME = "item-merge-step"
     }
 }

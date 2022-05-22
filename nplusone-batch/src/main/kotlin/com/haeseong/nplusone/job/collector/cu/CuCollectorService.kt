@@ -1,9 +1,9 @@
 package com.haeseong.nplusone.job.collector.cu
 
 import com.haeseong.nplusone.domain.item.DiscountType
-import com.haeseong.nplusone.domain.item.ItemDuplicatedException
 import com.haeseong.nplusone.domain.item.StoreType
 import com.haeseong.nplusone.domain.scrapping.ScrappingResultCreateVo
+import com.haeseong.nplusone.domain.scrapping.ScrappingResultDuplicatedException
 import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
 import com.haeseong.nplusone.job.collector.CollectorService
 import com.haeseong.nplusone.job.collector.DiscountedItem
@@ -87,8 +87,8 @@ class CuCollectorService(
                         referenceDate = now,
                     )
                 )
-            } catch (e: ItemDuplicatedException) {
-                log.warn("Item duplicated", e)
+            } catch (e: ScrappingResultDuplicatedException) {
+                log.warn("scrappingResult is duplicated", e)
             }
         }
     }
