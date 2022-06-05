@@ -1,11 +1,13 @@
 package com.haeseong.nplusone.domain.item.member
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 interface MemberService {
     fun create(memberCreateVo: MemberCreateVo): MemberVo
     fun get(idProvider: IdProvider): MemberVo
+    fun get(memberId: Long): MemberVo
 }
 
 @Service
@@ -27,6 +29,12 @@ class MemberServiceImpl(
     override fun get(idProvider: IdProvider): MemberVo {
         val member = memberRepository.findByIdProvider(idProvider = idProvider) ?: throw MemberNotFoundException()
         return MemberVo.from(member = member)
+    }
+
+    override fun get(memberId: Long): MemberVo {
+        return memberRepository.findByIdOrNull(memberId)
+            ?.let { MemberVo.from(it) }
+            ?: throw MemberNotFoundException()
     }
 
 }
