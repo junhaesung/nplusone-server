@@ -1,6 +1,7 @@
 package com.haeseong.nplusone.ui
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.haeseong.nplusone.domain.ResultCode
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Slice
 
@@ -61,6 +62,12 @@ data class ApiResponse<T>(
         fun failure() = ApiResponse(
             data = null,
             code = "FAILURE",
+            message = "실패",
+        )
+
+        fun failure(resultCode: ResultCode) = ApiResponse(
+            data = null,
+            code = resultCode.name,
             message = "실패",
         )
     }
