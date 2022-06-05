@@ -34,9 +34,6 @@ class ItemControllerTest {
     lateinit var mockMvc: MockMvc
 
     @Autowired
-    lateinit var itemService: ItemService
-
-    @Autowired
     lateinit var scrappingResultService: ScrappingResultService
 
     val objectMapper: ObjectMapper = jsonMapper {
