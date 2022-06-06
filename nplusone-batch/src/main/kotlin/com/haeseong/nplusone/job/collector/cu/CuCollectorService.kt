@@ -16,6 +16,7 @@ import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.lang.NumberFormatException
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.util.concurrent.TimeUnit
@@ -38,9 +39,15 @@ class CuCollectorService(
                 .map {
                     DiscountedItem(
                         name = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.name")).text,
-                        price = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.price")).text.replace(
-                            Regex("[,원\\s]"),
-                            "").toBigDecimal(),
+                        price = try {
+                            it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.price")).text.replace(
+                                Regex("[,원\\s]"),
+                                "").toBigDecimal()
+                        } catch (e: NumberFormatException) {
+                            val text = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.price")).text
+                            log.error("Failed to parse price. originText:$text", e)
+                            throw e
+                        },
                         imageUrl = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_img > img"))
                             .getAttribute("src"),
                         discountType = DiscountType.parse(it.findElement(By.cssSelector("a > div.badge > span")).text.trim()),
