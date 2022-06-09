@@ -36,23 +36,22 @@ class CuCollectorService(
             driver.get("https://cu.bgfretail.com/event/plus.do")
             goToLastPage(driver)
             return driver.findElementsByCssSelector("#contents > div.relCon > div > ul > li")
-                .map {
-                    DiscountedItem(
-                        name = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.name")).text,
-                        price = try {
-                            it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.price")).text.replace(
-                                Regex("[,원\\s]"),
-                                "").toBigDecimal()
-                        } catch (e: NumberFormatException) {
-                            val name = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.name")).text
-                            val price = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.price")).text
-                            log.error("Failed to parse price. name: $name, price:$price", e)
-                            throw e
-                        },
-                        imageUrl = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_img > img"))
-                            .getAttribute("src"),
-                        discountType = DiscountType.parse(it.findElement(By.cssSelector("a > div.badge > span")).text.trim()),
-                    )
+                .mapNotNull {
+                    try {
+                        DiscountedItem(
+                            name = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.name")).text,
+                            price = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.price")).text.replace(
+                                    Regex("[,원\\s]"), "").toBigDecimal(),
+                            imageUrl = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_img > img"))
+                                .getAttribute("src"),
+                            discountType = DiscountType.parse(it.findElement(By.cssSelector("a > div.badge > span")).text.trim()),
+                        )
+                    } catch (e: Exception) {
+                        val name = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.name")).text
+                        val price = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.price")).text
+                        log.error("Failed to parse price. name:$name, price:$price", e)
+                        null
+                    }
                 }
         } finally {
             driver.quit()
