@@ -3,7 +3,7 @@ package com.haeseong.nplusone.infrastructure.security
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.haeseong.nplusone.application.TokenService
 import com.haeseong.nplusone.domain.ResultCode
-import com.haeseong.nplusone.domain.item.member.MemberService
+import com.haeseong.nplusone.domain.member.MemberService
 import com.haeseong.nplusone.ui.ApiResponse
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
