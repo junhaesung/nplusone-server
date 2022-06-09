@@ -1,7 +1,7 @@
 package com.haeseong.nplusone.infrastructure.security
 
 import com.haeseong.nplusone.application.TokenService
-import com.haeseong.nplusone.domain.item.member.MemberService
+import com.haeseong.nplusone.domain.member.MemberService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.AuthenticationProvider

@@ -1,9 +1,9 @@
 package com.haeseong.nplusone.application
 
-import com.haeseong.nplusone.domain.item.member.IdProvider
-import com.haeseong.nplusone.domain.item.member.MemberCreateVo
-import com.haeseong.nplusone.domain.item.member.MemberNotFoundException
-import com.haeseong.nplusone.domain.item.member.MemberService
+import com.haeseong.nplusone.domain.member.IdProvider
+import com.haeseong.nplusone.domain.member.MemberCreateVo
+import com.haeseong.nplusone.domain.member.MemberNotFoundException
+import com.haeseong.nplusone.domain.member.MemberService
 import org.springframework.stereotype.Service
 
 interface MemberFacadeService {

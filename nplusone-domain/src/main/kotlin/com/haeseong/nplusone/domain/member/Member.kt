@@ -1,4 +1,4 @@
-package com.haeseong.nplusone.domain.item.member
+package com.haeseong.nplusone.domain.member
 
 import org.hibernate.annotations.GenericGenerator
 import org.springframework.data.annotation.CreatedDate
