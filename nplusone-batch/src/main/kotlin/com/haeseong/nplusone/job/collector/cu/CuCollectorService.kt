@@ -44,8 +44,9 @@ class CuCollectorService(
                                 Regex("[,원\\s]"),
                                 "").toBigDecimal()
                         } catch (e: NumberFormatException) {
-                            val text = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.price")).text
-                            log.error("Failed to parse price. originText:$text", e)
+                            val name = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.name")).text
+                            val price = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.price")).text
+                            log.error("Failed to parse price. name: $name, price:$price", e)
                             throw e
                         },
                         imageUrl = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_img > img"))
