@@ -23,6 +23,7 @@ class ItemImage(
     @JoinColumn(name = "itemId")
     val item: Item,
     val imageUrl: String?,
+    @Enumerated(EnumType.STRING)
     val storeType: StoreType,
 ) {
     @CreatedDate
