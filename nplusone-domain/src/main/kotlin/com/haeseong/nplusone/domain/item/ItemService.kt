@@ -51,8 +51,8 @@ class ItemServiceImpl(
     }
 
     private fun createItemName(itemCreateVo: ItemCreateVo, item: Item) {
-        val existsByImageUrlAndStoreType = itemImageRepository.existsByImageUrlAndStoreType(
-            imageUrl = itemCreateVo.imageUrl,
+        val existsByImageUrlAndStoreType = itemNameRepository.existsByNameAndStoreType(
+            name = itemCreateVo.name,
             storeType = itemCreateVo.storeType,
         )
         if (existsByImageUrlAndStoreType) {
