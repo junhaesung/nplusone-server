@@ -4,13 +4,21 @@ import com.haeseong.nplusone.domain.config.ConfigService
 import com.haeseong.nplusone.domain.item.DiscountType
 import com.haeseong.nplusone.domain.item.ItemQueryVo
 import com.haeseong.nplusone.domain.item.StoreType
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Slice
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
 
 interface ScrappingResultService {
     fun create(scrappingResultCreateVo: ScrappingResultCreateVo): ScrappingResultVo
     fun getItems(itemQueryVo: ItemQueryVo): Slice<ScrappingResultVo>
+    fun getScrappingResults(
+        referenceDate: LocalDate,
+        offsetScrappingResultId: Long,
+        limit: Int,
+    ): Slice<ScrappingResultVo>
 }
 
 @Service
@@ -46,6 +54,18 @@ class ScrappingResultServiceImpl(
             storeTypes = storeTypes,
             referenceDate = validDate,
             offsetId = itemQueryVo.offsetId
+        ).map { ScrappingResultVo.from(it) }
+    }
+
+    override fun getScrappingResults(
+        referenceDate: LocalDate,
+        offsetScrappingResultId: Long,
+        limit: Int,
+    ): Slice<ScrappingResultVo> {
+        return scrappingResultRepository.findByReferenceDateAndScrappingResultIdGreaterThanOrderByScrappingResultId(
+            referenceDate,
+            offsetScrappingResultId,
+            PageRequest.of(0, limit, Sort.Direction.ASC, "scrappingResultId")
         ).map { ScrappingResultVo.from(it) }
     }
 }
