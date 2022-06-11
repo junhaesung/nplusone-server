@@ -1,7 +1,6 @@
 package com.haeseong.nplusone.domain.scrapping
 
 import com.haeseong.nplusone.domain.item.DiscountType
-import com.haeseong.nplusone.domain.item.Item
 import com.haeseong.nplusone.domain.item.StoreType
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
@@ -23,5 +22,11 @@ interface ScrappingResultRepository : JpaRepository<ScrappingResult, Long> {
         referenceDate: LocalDate = LocalDate.now(),
         offsetId: Long,
         pageable: Pageable = Pageable.ofSize(20),
+    ): Slice<ScrappingResult>
+
+    fun findByReferenceDateAndScrappingResultIdGreaterThanOrderByScrappingResultId(
+        referenceDate: LocalDate,
+        offsetScrappingResultId: Long,
+        pageable: Pageable
     ): Slice<ScrappingResult>
 }
