@@ -51,6 +51,7 @@ class SecurityConfig(
             .authorizeRequests()
             // FIXME: client authentication 개발되면 items api 도 인증필요
             .antMatchers("/api/v1/items/**").permitAll()
+            .antMatchers("/api/v1/wish-items/**").permitAll()
             .antMatchers("/api/v1/members/login").permitAll()
             .anyRequest().hasAuthority(MEMBER_ROLE_NAME)
         http.cors().configurationSource(corsConfigurationSource())

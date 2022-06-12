@@ -3,4 +3,4 @@ spring:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
 jwt:
-  secretKey:
+  secretKey: ENC(CVtS/5nyHMRpz74cczBJkJPkhtYP5xQxjyPeKpvKjIiGTplYe9xwZSnKU1i/+ERzPfkCmQIT6/F67ZGrfLERyg==)
