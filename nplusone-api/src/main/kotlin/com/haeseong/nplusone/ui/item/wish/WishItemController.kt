@@ -5,6 +5,7 @@ import com.haeseong.nplusone.ui.ApiResponse
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken
 import org.springframework.web.bind.annotation.*
+import springfox.documentation.annotations.ApiIgnore
 
 @RestController
 @RequestMapping("/api/v1/wish-items")
@@ -13,7 +14,7 @@ class WishItemController(
 ) {
     @PostMapping
     fun add(
-        authentication: Authentication,
+        @ApiIgnore authentication: Authentication,
         @RequestBody wishItemCreateRequest: WishItemCreateRequest,
     ): ApiResponse<*> {
         wishItemService.add(
@@ -25,7 +26,7 @@ class WishItemController(
 
     @DeleteMapping("/{itemId}")
     fun remove(
-        authentication: Authentication,
+        @ApiIgnore authentication: Authentication,
         @PathVariable itemId: Long,
     ): ApiResponse<*> {
         wishItemService.remove(
@@ -34,7 +35,6 @@ class WishItemController(
         )
         return ApiResponse.success()
     }
-
 
     private fun resolveMemberId(authentication: Authentication): Long {
         if (authentication is PreAuthenticatedAuthenticationToken) {
