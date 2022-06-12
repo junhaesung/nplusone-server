@@ -1,17 +1,19 @@
 package com.haeseong.nplusone.domain.item.detail
 
-import com.haeseong.nplusone.domain.item.Item
-import com.haeseong.nplusone.domain.item.ItemNotFoundException
+import com.haeseong.nplusone.domain.config.ConfigService
+import com.haeseong.nplusone.domain.item.*
 import com.haeseong.nplusone.domain.item.name.ItemNameRepository
 import com.haeseong.nplusone.domain.scrapping.ScrappingResultVo
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.dao.IncorrectResultSizeDataAccessException
+import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 interface ItemDetailService {
     fun create(scrappingResultVo: ScrappingResultVo)
+    fun getItemDetails(itemQueryVo: ItemQueryVo): Slice<ItemDetailVo>
 }
 
 @Service
@@ -19,6 +21,7 @@ interface ItemDetailService {
 class ItemDetailServiceImpl(
     private val itemDetailRepository: ItemDetailRepository,
     private val itemNameRepository: ItemNameRepository,
+    private val configService: ConfigService,
 ) : ItemDetailService {
     @Transactional
     override fun create(scrappingResultVo: ScrappingResultVo) {
@@ -42,6 +45,21 @@ class ItemDetailServiceImpl(
                 referenceDate = scrappingResultVo.referenceDate,
             )
         )
+    }
+
+    override fun getItemDetails(itemQueryVo: ItemQueryVo): Slice<ItemDetailVo> {
+        val discountTypes = itemQueryVo.discountType?.run { listOf(this) }
+            ?: listOf(DiscountType.ONE_PLUS_ONE, DiscountType.TWO_PLUS_ONE)
+        val storeTypes = itemQueryVo.storeType?.run { listOf(this) }
+            ?: StoreType.values().toList()
+        val validDate = configService.getReferenceDate()
+        return itemDetailRepository.findByNameContainsAndDiscountTypeInAndStoreTypeInAndReferenceDateAndItemDetailIdGreaterThan(
+            name = itemQueryVo.name ?: "",
+            discountTypes = discountTypes,
+            storeTypes = storeTypes,
+            referenceDate = validDate,
+            offsetId = itemQueryVo.offsetId,
+        ).map { ItemDetailVo.from(it) }
     }
 
     private fun resolveItem(scrappingResultVo: ScrappingResultVo): Item {
