@@ -17,9 +17,9 @@ class PreAuthTokenProvider(
     override fun authenticate(authentication: Authentication): Authentication {
         if (authentication is PreAuthenticatedAuthenticationToken) {
             val token = authentication.getPrincipal().toString()
-            val applicantId: Long = tokenService.decode(token)
+            val memberId: Long = tokenService.decode(token)
             val memberVo = try {
-                memberService.get(applicantId)
+                memberService.get(memberId)
             } catch (e: Exception) {
                 log.warn("member not found", e)
                 throw TokenMissingException("Member not found")
