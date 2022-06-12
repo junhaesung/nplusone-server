@@ -9,7 +9,8 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.YearMonth
 
-data class ItemResponse(
+data class ItemDetailResponse(
+    val itemDetailId: Long,
     val itemId: Long,
     val name: String,
     val price: BigDecimal,
@@ -20,5 +21,5 @@ data class ItemResponse(
 ) : OffsetIdSupport {
     @get:JsonIgnore
     override val offsetId: Long
-        get() = itemId
+        get() = itemDetailId
 }

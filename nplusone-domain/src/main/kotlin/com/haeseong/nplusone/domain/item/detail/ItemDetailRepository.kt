@@ -2,6 +2,10 @@ package com.haeseong.nplusone.domain.item.detail
 
 import com.haeseong.nplusone.domain.item.DiscountType
 import com.haeseong.nplusone.domain.item.StoreType
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Slice
+import org.springframework.data.domain.Sort
 import org.springframework.data.jpa.repository.JpaRepository
 import java.time.LocalDate
 
@@ -12,4 +16,13 @@ interface ItemDetailRepository : JpaRepository<ItemDetail, Long> {
         storeType: StoreType,
         referenceDate: LocalDate,
     ): Boolean
+
+    fun findByNameContainsAndDiscountTypeInAndStoreTypeInAndReferenceDateAndItemDetailIdGreaterThan(
+        name: String,
+        discountTypes: Collection<DiscountType>,
+        storeTypes: Collection<StoreType>,
+        referenceDate: LocalDate,
+        offsetId: Long,
+        pageable: Pageable = PageRequest.of(0, 20, Sort.Direction.ASC, "itemDetailId"),
+    ): Slice<ItemDetail>
 }
