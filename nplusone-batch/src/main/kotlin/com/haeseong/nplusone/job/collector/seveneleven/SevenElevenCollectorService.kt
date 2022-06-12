@@ -96,7 +96,7 @@ class SevenElevenCollectorService(
                     DiscountedItem(
                         it.findElement(By.cssSelector( prefix + "div > div > div.name")).text,
                         it.findElement(By.cssSelector(prefix + "div > div > div.price > span")).text.replace(Regex("[,원\\s]"), "").toBigDecimal(),
-                        "https://www.7-eleven.co.kr" + it.findElement(By.cssSelector(prefix + "div > img")).getAttribute("src"),
+                        it.findElement(By.cssSelector(prefix + "div > img")).getAttribute("src"),
                         DiscountType.parse(it.findElement(By.cssSelector("ul > li")).text.trim()),
                     )
                 }
