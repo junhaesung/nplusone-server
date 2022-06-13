@@ -7,13 +7,17 @@ import com.haeseong.nplusone.domain.scrapping.ScrappingResultVo
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.dao.IncorrectResultSizeDataAccessException
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Slice
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 interface ItemDetailService {
     fun create(scrappingResultVo: ScrappingResultVo)
     fun getItemDetails(itemQueryVo: ItemQueryVo): Slice<ItemDetailVo>
+    fun getItemDetailPage(itemQueryVo: ItemQueryVo): Page<ItemDetailVo>
 }
 
 @Service
@@ -52,13 +56,28 @@ class ItemDetailServiceImpl(
             ?: listOf(DiscountType.ONE_PLUS_ONE, DiscountType.TWO_PLUS_ONE)
         val storeTypes = itemQueryVo.storeType?.run { listOf(this) }
             ?: StoreType.values().toList()
-        val validDate = configService.getReferenceDate()
+        val referenceDate = configService.getReferenceDate()
         return itemDetailRepository.findByNameContainsAndDiscountTypeInAndStoreTypeInAndReferenceDateAndItemDetailIdGreaterThan(
             name = itemQueryVo.name ?: "",
             discountTypes = discountTypes,
             storeTypes = storeTypes,
-            referenceDate = validDate,
+            referenceDate = referenceDate,
             offsetId = itemQueryVo.offsetId,
+        ).map { ItemDetailVo.from(it) }
+    }
+
+    override fun getItemDetailPage(itemQueryVo: ItemQueryVo): Page<ItemDetailVo> {
+        val discountTypes = itemQueryVo.discountType?.run { listOf(this) }
+            ?: listOf(DiscountType.ONE_PLUS_ONE, DiscountType.TWO_PLUS_ONE)
+        val storeTypes = itemQueryVo.storeType?.run { listOf(this) }
+            ?: StoreType.values().toList()
+        val referenceDate = configService.getReferenceDate()
+        return itemDetailRepository.findByNameContainsAndDiscountTypeInAndStoreTypeInAndReferenceDate(
+            discountTypes = discountTypes,
+            storeTypes = storeTypes,
+            name = itemQueryVo.name ?: "",
+            referenceDate = referenceDate,
+            pageable = PageRequest.of(0, itemQueryVo.pageSize, Sort.Direction.ASC, "itemDetailId")
         ).map { ItemDetailVo.from(it) }
     }
 
