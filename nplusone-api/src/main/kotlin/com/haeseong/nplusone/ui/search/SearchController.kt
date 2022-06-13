@@ -26,6 +26,8 @@ class SearchController(
             memberId = authentication.resolveMemberId(),
             searchRequestVo = SearchRequestVo(
                 searchWord = searchRequest.searchWord,
+                discountType = searchRequest.discountType,
+                storeType = searchRequest.storeType,
                 offsetId = searchRequest.offsetId,
                 pageSize = searchRequest.pageSize,
             ),

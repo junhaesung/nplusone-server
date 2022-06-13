@@ -29,6 +29,8 @@ class SearchServiceImpl(
             return itemDetailService.getItemDetailPage(
                 itemQueryVo = ItemQueryVo(
                     name = searchRequestVo.searchWord,
+                    discountType = searchRequestVo.discountType,
+                    storeType = searchRequestVo.storeType,
                     offsetId = 0L,
                     pageSize = searchRequestVo.pageSize,
                 )
@@ -38,6 +40,8 @@ class SearchServiceImpl(
             itemDetailService.getItemDetails(
                 itemQueryVo = ItemQueryVo(
                     name = searchRequestVo.searchWord,
+                    discountType = searchRequestVo.discountType,
+                    storeType = searchRequestVo.storeType,
                     offsetId = searchRequestVo.offsetId,
                     pageSize = searchRequestVo.pageSize,
                 )

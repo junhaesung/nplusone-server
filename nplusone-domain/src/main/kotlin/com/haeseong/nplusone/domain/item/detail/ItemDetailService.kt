@@ -56,21 +56,27 @@ class ItemDetailServiceImpl(
             ?: listOf(DiscountType.ONE_PLUS_ONE, DiscountType.TWO_PLUS_ONE)
         val storeTypes = itemQueryVo.storeType?.run { listOf(this) }
             ?: StoreType.values().toList()
-        val validDate = configService.getReferenceDate()
+        val referenceDate = configService.getReferenceDate()
         return itemDetailRepository.findByNameContainsAndDiscountTypeInAndStoreTypeInAndReferenceDateAndItemDetailIdGreaterThan(
             name = itemQueryVo.name ?: "",
             discountTypes = discountTypes,
             storeTypes = storeTypes,
-            referenceDate = validDate,
+            referenceDate = referenceDate,
             offsetId = itemQueryVo.offsetId,
         ).map { ItemDetailVo.from(it) }
     }
 
     override fun getItemDetailPage(itemQueryVo: ItemQueryVo): Page<ItemDetailVo> {
-        val validDate = configService.getReferenceDate()
-        return itemDetailRepository.findByNameContainsAndReferenceDate(
+        val discountTypes = itemQueryVo.discountType?.run { listOf(this) }
+            ?: listOf(DiscountType.ONE_PLUS_ONE, DiscountType.TWO_PLUS_ONE)
+        val storeTypes = itemQueryVo.storeType?.run { listOf(this) }
+            ?: StoreType.values().toList()
+        val referenceDate = configService.getReferenceDate()
+        return itemDetailRepository.findByNameContainsAndDiscountTypeInAndStoreTypeInAndReferenceDate(
+            discountTypes = discountTypes,
+            storeTypes = storeTypes,
             name = itemQueryVo.name ?: "",
-            referenceDate = validDate,
+            referenceDate = referenceDate,
             pageable = PageRequest.of(0, itemQueryVo.pageSize, Sort.Direction.ASC, "itemDetailId")
         ).map { ItemDetailVo.from(it) }
     }

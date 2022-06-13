@@ -23,8 +23,10 @@ interface ItemDetailRepository : JpaRepository<ItemDetail, Long> {
         pageable: Pageable = PageRequest.of(0, 20, Sort.Direction.ASC, "itemDetailId"),
     ): Slice<ItemDetail>
 
-    fun findByNameContainsAndReferenceDate(
+    fun findByNameContainsAndDiscountTypeInAndStoreTypeInAndReferenceDate(
         name: String,
+        discountTypes: Collection<DiscountType>,
+        storeTypes: Collection<StoreType>,
         referenceDate: LocalDate,
         pageable: Pageable,
     ): Page<ItemDetail>
