@@ -8,6 +8,7 @@ interface MemberService {
     fun create(memberCreateVo: MemberCreateVo): MemberVo
     fun get(idProvider: IdProvider): MemberVo
     fun get(memberId: Long): MemberVo
+    fun getMember(memberId: Long): Member
 }
 
 @Service
@@ -35,6 +36,10 @@ class MemberServiceImpl(
         return memberRepository.findByIdOrNull(memberId)
             ?.let { MemberVo.from(it) }
             ?: throw MemberNotFoundException()
+    }
+
+    override fun getMember(memberId: Long): Member {
+        return memberRepository.findByIdOrNull(memberId) ?: throw MemberNotFoundException()
     }
 
 }
