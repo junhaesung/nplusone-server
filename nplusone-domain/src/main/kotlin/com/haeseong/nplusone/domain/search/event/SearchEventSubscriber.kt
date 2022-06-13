@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.event.TransactionalEventListener
 
 interface SearchEventSubscriber {
+    @TransactionalEventListener(SearchEvent::class)
     fun subscribeAsync(searchEvent: SearchEvent)
 }
 
@@ -15,7 +16,6 @@ class SearchEventApplicationEventSubscriber(
 ) : SearchEventSubscriber {
 
     @Async
-    @TransactionalEventListener(SearchEvent::class)
     override fun subscribeAsync(searchEvent: SearchEvent) {
         record(searchEvent = searchEvent)
     }
