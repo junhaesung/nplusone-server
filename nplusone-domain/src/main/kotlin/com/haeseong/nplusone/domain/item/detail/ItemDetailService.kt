@@ -7,13 +7,17 @@ import com.haeseong.nplusone.domain.scrapping.ScrappingResultVo
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.dao.IncorrectResultSizeDataAccessException
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Slice
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 interface ItemDetailService {
     fun create(scrappingResultVo: ScrappingResultVo)
     fun getItemDetails(itemQueryVo: ItemQueryVo): Slice<ItemDetailVo>
+    fun getItemDetailPage(itemQueryVo: ItemQueryVo): Page<ItemDetailVo>
 }
 
 @Service
@@ -59,6 +63,15 @@ class ItemDetailServiceImpl(
             storeTypes = storeTypes,
             referenceDate = validDate,
             offsetId = itemQueryVo.offsetId,
+        ).map { ItemDetailVo.from(it) }
+    }
+
+    override fun getItemDetailPage(itemQueryVo: ItemQueryVo): Page<ItemDetailVo> {
+        val validDate = configService.getReferenceDate()
+        return itemDetailRepository.findByNameContainsAndReferenceDate(
+            name = itemQueryVo.name ?: "",
+            referenceDate = validDate,
+            pageable = PageRequest.of(0, itemQueryVo.pageSize, Sort.Direction.ASC, "itemDetailId")
         ).map { ItemDetailVo.from(it) }
     }
 

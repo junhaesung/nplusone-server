@@ -1,4 +1,4 @@
-package com.haeseong.nplusone.domain.search
+package com.haeseong.nplusone.domain.search.history
 
 import com.haeseong.nplusone.domain.member.Member
 import org.hibernate.annotations.GenericGenerator

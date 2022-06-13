@@ -1,4 +1,4 @@
-package com.haeseong.nplusone.domain.search
+package com.haeseong.nplusone.domain.search.history
 
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository

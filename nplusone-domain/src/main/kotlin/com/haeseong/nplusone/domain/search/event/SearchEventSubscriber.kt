@@ -1,5 +1,6 @@
-package com.haeseong.nplusone.domain.search
+package com.haeseong.nplusone.domain.search.event
 
+import com.haeseong.nplusone.domain.search.history.SearchHistoryService
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
 import org.springframework.transaction.event.TransactionalEventListener

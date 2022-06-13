@@ -1,4 +1,4 @@
-package com.haeseong.nplusone.domain.search
+package com.haeseong.nplusone.domain.search.event
 
 import java.time.LocalDateTime
 

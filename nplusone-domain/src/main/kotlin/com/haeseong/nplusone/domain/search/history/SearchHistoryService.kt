@@ -1,6 +1,7 @@
-package com.haeseong.nplusone.domain.search
+package com.haeseong.nplusone.domain.search.history
 
 import com.haeseong.nplusone.domain.member.MemberService
+import com.haeseong.nplusone.domain.search.event.SearchEvent
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
