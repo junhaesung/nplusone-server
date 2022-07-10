@@ -7,6 +7,6 @@ data class ItemQueryRequest(
     val name: String?,
     val discountType: DiscountType?,
     val storeType: StoreType?,
-    val offsetId: Long = 0,
-    val pageSize: Int = 20,
+    val offsetId: Long?,
+    val pageSize: Int?,
 )
