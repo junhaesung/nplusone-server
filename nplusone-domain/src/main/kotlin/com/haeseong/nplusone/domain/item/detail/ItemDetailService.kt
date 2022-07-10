@@ -63,6 +63,7 @@ class ItemDetailServiceImpl(
             storeTypes = storeTypes,
             referenceDate = referenceDate,
             offsetId = itemQueryVo.offsetId,
+            pageable = PageRequest.of(0, itemQueryVo.pageSize, Sort.Direction.ASC, "itemDetailId"),
         ).map { ItemDetailVo.from(it) }
     }
 
