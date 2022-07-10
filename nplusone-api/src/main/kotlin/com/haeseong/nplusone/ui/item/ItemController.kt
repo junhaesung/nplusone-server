@@ -21,8 +21,8 @@ class ItemController(
             name = itemQueryRequest.name,
             discountType = itemQueryRequest.discountType,
             storeType = itemQueryRequest.storeType,
-            offsetId = itemQueryRequest.offsetId,
-            pageSize = itemQueryRequest.pageSize,
+            offsetId = itemQueryRequest.offsetId ?: 0,
+            pageSize = itemQueryRequest.pageSize ?: 20,
         )
         val itemResponseSlice = itemDetailService.getItemDetails(itemQueryVo = itemQueryVo)
             .map {
