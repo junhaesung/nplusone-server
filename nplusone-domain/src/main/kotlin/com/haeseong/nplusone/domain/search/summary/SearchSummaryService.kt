@@ -20,7 +20,7 @@ class SearchSummaryServiceImpl(
     override fun create(referenceDateTime: LocalDateTime): List<SearchSummaryVo> {
         val endDateTime = referenceDateTime.toLocalDate().atTime(referenceDateTime.hour, 0)
         val searchWordRankingList = searchHistoryRepository.associateBySearchWord(
-            begin = referenceDateTime.minusDays(1L),
+            begin = endDateTime.minusDays(1L),
             end = endDateTime,
             limit = 20,
         )
