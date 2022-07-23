@@ -18,6 +18,7 @@ interface ItemDetailService {
     fun create(scrappingResultVo: ScrappingResultVo)
     fun getItemDetails(itemQueryVo: ItemQueryVo): Slice<ItemDetailVo>
     fun getItemDetailPage(itemQueryVo: ItemQueryVo): Page<ItemDetailVo>
+    fun countItems(itemQueryVo: ItemQueryVo): Long
 }
 
 @Service
@@ -80,6 +81,10 @@ class ItemDetailServiceImpl(
             referenceDate = referenceDate,
             pageable = PageRequest.of(0, itemQueryVo.pageSize, Sort.Direction.ASC, "itemDetailId")
         ).map { ItemDetailVo.from(it) }
+    }
+
+    override fun countItems(itemQueryVo: ItemQueryVo): Long {
+        return getItemDetailPage(itemQueryVo).totalElements
     }
 
     private fun resolveItem(scrappingResultVo: ScrappingResultVo): Item {
