@@ -25,18 +25,7 @@ class ItemController(
             pageSize = itemQueryRequest.pageSize ?: 20,
         )
         val itemResponseSlice = itemDetailService.getItemDetails(itemQueryVo = itemQueryVo)
-            .map {
-                ItemDetailResponse(
-                    itemDetailId = it.itemDetailId,
-                    itemId = it.itemId,
-                    name = it.name,
-                    price = it.price,
-                    imageUrl = it.imageUrl,
-                    discountType = it.discountType,
-                    storeType = it.storeType,
-                    referenceDate = it.referenceDate,
-                )
-            }
+            .map { it.toDto() }
         return ApiResponse.success(itemResponseSlice)
     }
 }
