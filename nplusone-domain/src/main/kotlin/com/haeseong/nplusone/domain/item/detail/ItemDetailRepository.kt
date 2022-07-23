@@ -30,4 +30,16 @@ interface ItemDetailRepository : JpaRepository<ItemDetail, Long> {
         referenceDate: LocalDate,
         pageable: Pageable,
     ): Page<ItemDetail>
+
+    fun findByStoreTypeAndReferenceDate(
+        storeType: StoreType,
+        referenceDate: LocalDate,
+        pageable: Pageable,
+    ): Slice<ItemDetail>
+
+    fun findByDiscountTypeAndReferenceDate(
+        discountType: DiscountType,
+        referenceDate: LocalDate,
+        pageable: Pageable,
+    ): Slice<ItemDetail>
 }
