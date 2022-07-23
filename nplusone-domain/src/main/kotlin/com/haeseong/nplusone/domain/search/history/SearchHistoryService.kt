@@ -21,11 +21,23 @@ class SearchHistoryServiceImpl(
 ) : SearchHistoryService {
     @Transactional
     override fun record(searchEvent: SearchEvent): SearchHistoryVo {
+        val member = memberService.getMember(memberId = searchEvent.memberId)
+        val searchWord = searchEvent.searchWord
+        val searchedAt = searchEvent.searchedAt
+
+        // 이미 검색 기록이 존재하면, 검색 시간을 수정함
+        val searchHistory = searchHistoryRepository.findByMemberAndSearchWord(member, searchWord)
+        if (searchHistory != null) {
+            searchHistory.searchedAt = searchedAt
+            return SearchHistoryVo.from(searchHistory)
+        }
+
+        // 검색기록이 존재하지 않으면 새로 추가
         return searchHistoryRepository.save(
             SearchHistory(
                 member = memberService.getMember(memberId = searchEvent.memberId),
                 searchWord = searchEvent.searchWord,
-                searchedAt = searchEvent.searchedAt,
+                searchedAt = searchedAt,
             )
         ).let { SearchHistoryVo.from(it) }
     }

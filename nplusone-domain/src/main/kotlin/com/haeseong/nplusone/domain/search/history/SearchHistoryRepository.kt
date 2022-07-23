@@ -1,5 +1,6 @@
 package com.haeseong.nplusone.domain.search.history
 
+import com.haeseong.nplusone.domain.member.Member
 import com.haeseong.nplusone.domain.search.summary.SearchWordRanking
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
@@ -21,4 +22,5 @@ interface SearchHistoryRepository : JpaRepository<SearchHistory, Long> {
         nativeQuery = true,
     )
     fun associateBySearchWord(begin: LocalDateTime, end: LocalDateTime, limit: Int): List<SearchWordRanking>
+    fun findByMemberAndSearchWord(member: Member, searchWord: String): SearchHistory?
 }
