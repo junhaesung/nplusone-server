@@ -28,7 +28,9 @@ class RecommendController(
                 recommendService.recommend(discountType = recommendRequest.discountType)
             }
             else -> {
-                throw BadRequestException()
+                throw BadRequestException(
+                    message = "At least one of 'storeType', 'discountType' must be present. $recommendRequest"
+                )
             }
         }.map { it.toDto() }
     )
