@@ -1,9 +1,10 @@
 package com.haeseong.nplusone.ui.search
 
-import com.haeseong.nplusone.domain.item.detail.ItemDetailVo
 import com.haeseong.nplusone.domain.search.SearchRequestVo
 import com.haeseong.nplusone.domain.search.SearchService
 import com.haeseong.nplusone.ui.ApiResponse
+import com.haeseong.nplusone.ui.item.ItemDetailResponse
+import com.haeseong.nplusone.ui.item.toDto
 import com.haeseong.nplusone.ui.resolveMemberId
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.PostMapping
@@ -21,19 +22,37 @@ class SearchController(
     fun search(
         @ApiIgnore authentication: Authentication,
         @RequestBody searchRequest: SearchRequest,
-    ): ApiResponse<List<ItemDetailVo>> {
-        val itemDetailVoPage = searchService.search(
+    ): ApiResponse<List<ItemDetailResponse>> {
+        val itemDetailResponseSlice = searchService.search(
             memberId = authentication.resolveMemberId(),
             searchRequestVo = SearchRequestVo(
                 searchWord = searchRequest.searchWord,
                 discountType = searchRequest.discountType,
                 storeType = searchRequest.storeType,
-                offsetId = searchRequest.offsetId,
+                offsetId = searchRequest.offsetId ?: 0L,
                 pageSize = searchRequest.pageSize,
             ),
-        )
+        ).map { it.toDto() }
         return ApiResponse.success(
-            page = itemDetailVoPage,
+            slice = itemDetailResponseSlice,
+        )
+    }
+
+    @PostMapping("/count")
+    fun count(
+        @ApiIgnore authentication: Authentication,
+        @RequestBody searchRequest: SearchRequest,
+    ): ApiResponse<Long> {
+        return ApiResponse.success(
+            data = searchService.count(
+                searchRequestVo = SearchRequestVo(
+                    searchWord = searchRequest.searchWord,
+                    discountType = searchRequest.discountType,
+                    storeType = searchRequest.storeType,
+                    offsetId = searchRequest.offsetId ?: 0L,
+                    pageSize = searchRequest.pageSize,
+                ),
+            ),
         )
     }
 }

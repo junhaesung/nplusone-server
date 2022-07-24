@@ -7,6 +7,6 @@ data class SearchRequestVo(
     val searchWord: String,
     val discountType: DiscountType?,
     val storeType: StoreType?,
-    val offsetId: Long?,
+    val offsetId: Long,
     val pageSize: Int,
 )
