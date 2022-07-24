@@ -4,14 +4,14 @@ import com.haeseong.nplusone.domain.item.ItemQueryVo
 import com.haeseong.nplusone.domain.item.detail.ItemDetailService
 import com.haeseong.nplusone.domain.item.detail.ItemDetailVo
 import com.haeseong.nplusone.domain.search.event.SearchEventPublisher
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 interface SearchService {
-    fun search(memberId: Long, searchRequestVo: SearchRequestVo): Page<ItemDetailVo>
+    fun search(memberId: Long, searchRequestVo: SearchRequestVo): Slice<ItemDetailVo>
+    fun count(searchRequestVo: SearchRequestVo): Long
 }
 
 @Service
@@ -21,31 +21,29 @@ class SearchServiceImpl(
     private val searchEventPublisher: SearchEventPublisher,
 ) : SearchService {
 
-    override fun search(memberId: Long, searchRequestVo: SearchRequestVo): Page<ItemDetailVo> {
+    override fun search(memberId: Long, searchRequestVo: SearchRequestVo): Slice<ItemDetailVo> {
         publishSearchEvent(memberId, searchRequestVo)
 
-        // 처음 요청하면 offsetId is null
-        if (searchRequestVo.offsetId == null) {
-            return itemDetailService.getItemDetailPage(
-                itemQueryVo = ItemQueryVo(
-                    name = searchRequestVo.searchWord,
-                    discountType = searchRequestVo.discountType,
-                    storeType = searchRequestVo.storeType,
-                    offsetId = 0L,
-                    pageSize = searchRequestVo.pageSize,
-                )
+        return itemDetailService.getItemDetails(
+            itemQueryVo = ItemQueryVo(
+                name = searchRequestVo.searchWord,
+                discountType = searchRequestVo.discountType,
+                storeType = searchRequestVo.storeType,
+                offsetId = searchRequestVo.offsetId,
+                pageSize = searchRequestVo.pageSize,
             )
-        }
-        return PageImpl(
-            itemDetailService.getItemDetails(
-                itemQueryVo = ItemQueryVo(
-                    name = searchRequestVo.searchWord,
-                    discountType = searchRequestVo.discountType,
-                    storeType = searchRequestVo.storeType,
-                    offsetId = searchRequestVo.offsetId,
-                    pageSize = searchRequestVo.pageSize,
-                )
-            ).content
+        )
+    }
+
+    override fun count(searchRequestVo: SearchRequestVo): Long {
+        return itemDetailService.countItems(
+            itemQueryVo = ItemQueryVo(
+                name = searchRequestVo.searchWord,
+                discountType = searchRequestVo.discountType,
+                storeType = searchRequestVo.storeType,
+                offsetId = searchRequestVo.offsetId,
+                pageSize = searchRequestVo.pageSize,
+            )
         )
     }
 
