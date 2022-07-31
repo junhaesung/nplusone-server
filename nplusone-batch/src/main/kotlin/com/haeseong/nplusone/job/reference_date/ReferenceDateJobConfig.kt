@@ -12,6 +12,7 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer
 import org.springframework.batch.core.repository.JobRepository
 import org.springframework.batch.core.step.tasklet.Tasklet
 import org.springframework.batch.repeat.RepeatStatus
+import org.springframework.batch.support.transaction.ResourcelessTransactionManager
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -43,6 +44,7 @@ class ReferenceDateJobConfig(
     fun referenceDateStep(): Step {
         return stepBuilderFactory[STEP_NAME]
             .tasklet(referenceDateTasklet())
+            .transactionManager(ResourcelessTransactionManager())
             .build()
     }
 
