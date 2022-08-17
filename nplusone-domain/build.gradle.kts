@@ -6,6 +6,7 @@ dependencies {
     implementation("mysql:mysql-connector-java")
     implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")
     testImplementation("com.h2database:h2")
+    implementation("com.google.firebase:firebase-admin:9.0.0")
 }
 
 tasks.withType<Jar> {
