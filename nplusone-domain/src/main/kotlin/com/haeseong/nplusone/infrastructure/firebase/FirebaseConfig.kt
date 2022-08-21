@@ -1,4 +1,4 @@
-package com.haeseong.nplusone.infrastructure.notification
+package com.haeseong.nplusone.infrastructure.firebase
 
 import com.google.auth.oauth2.ServiceAccountCredentials
 import com.google.firebase.FirebaseApp

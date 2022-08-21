@@ -1,7 +1,6 @@
-package com.haeseong.nplusone.infrastructure.notification
+package com.haeseong.nplusone.infrastructure.firebase
 
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.Message
+import com.google.firebase.messaging.*
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

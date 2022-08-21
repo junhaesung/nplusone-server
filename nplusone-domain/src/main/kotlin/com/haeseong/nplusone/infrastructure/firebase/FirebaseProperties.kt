@@ -1,4 +1,4 @@
-package com.haeseong.nplusone.infrastructure.notification
+package com.haeseong.nplusone.infrastructure.firebase
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 
