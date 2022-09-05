@@ -3,6 +3,7 @@ package com.haeseong.nplusone.ui.member
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.haeseong.nplusone.application.TokenService
 import com.haeseong.nplusone.domain.member.IdProviderType
+import com.haeseong.nplusone.infrastructure.firebase.FirebaseConfig
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.anyLong
@@ -26,6 +27,9 @@ class MemberControllerTest {
 
     @MockBean
     lateinit var tokenService: TokenService<Long>
+
+    @MockBean
+    lateinit var firebaseConfig: FirebaseConfig
 
     @Test
     fun login() {

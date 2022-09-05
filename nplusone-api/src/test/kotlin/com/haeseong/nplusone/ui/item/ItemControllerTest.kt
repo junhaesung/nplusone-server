@@ -15,6 +15,7 @@ import com.haeseong.nplusone.domain.item.detail.ItemDetailService
 import com.haeseong.nplusone.domain.scrapping.ScrappingResultCreateVo
 import com.haeseong.nplusone.domain.scrapping.ScrappingResultService
 import com.haeseong.nplusone.domain.scrapping.ScrappingResultVo
+import com.haeseong.nplusone.infrastructure.firebase.FirebaseConfig
 import com.haeseong.nplusone.ui.ApiResponse
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
@@ -46,6 +47,9 @@ class ItemControllerTest {
 
     @Autowired
     lateinit var configService: ConfigService
+
+    @MockBean
+    lateinit var firebaseConfig: FirebaseConfig
 
     val objectMapper: ObjectMapper = jsonMapper {
         addModule(kotlinModule())
