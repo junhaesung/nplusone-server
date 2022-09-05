@@ -1,0 +1,16 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+jwt:
+  secretKey:
+
+nplusone:
+  notification:
+    firebase:
+      project-id:
+      private-key-id:
+      private-key:
+      client-email:
+      client-id:
+      token-uri:
