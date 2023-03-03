@@ -39,25 +39,24 @@ class Emart24CollectorService(
         val items = mutableListOf<DiscountedItem>()
 
         try {
-            driver.get("https://emart24.co.kr/product/eventProduct.asp")
-            driver.executeScript("javascript:goTab('1n1')")
+            driver.get("https://www.emart24.co.kr/goods/event?search=&category_seq=1&align=")
 
             while (true) {
                 // save all
-                val discountedItems = driver.findElementsByCssSelector("#regForm > div.section > div.eventProduct > div.tabContArea > ul > li")
+                val discountedItems = driver.findElementsByCssSelector("body > div.viewContentsWrap > div > section.itemList.active > div")
                     .map {
-                        val priceText = it.findElement(By.cssSelector("div > p.price")).text.replace(Regex("[,원\\s]"), "")
+                        val priceText = it.findElement(By.cssSelector("div.itemTxtWrap > span")).text.replace(Regex("[,원\\s]"), "")
                         DiscountedItem(
-                            name = it.findElement(By.cssSelector( "div > p.productDiv")).text.trim(),
+                            name = it.findElement(By.cssSelector( "div.itemTxtWrap > div.itemtitle > p")).text.trim(),
                             price = if (priceText.isBlank()) BigDecimal.ZERO else priceText.toBigDecimal(),
-                            imageUrl = it.findElement(By.cssSelector("div.box > p.productImg > img")).getAttribute("src"),
-                            discountType = DiscountType.parse(it.findElement(By.cssSelector("div > div > p > img")).getAttribute("alt").replace(Regex("[\\s]"), "").take(3)),
+                            imageUrl = it.findElement(By.cssSelector("div.itemImg > img")).getAttribute("src"),
+                            discountType = DiscountType.parse(it.findElement(By.cssSelector("div.itemTit > span.onepl.floatR")).text.replace(Regex("[\\s]"), "").take(3)),
                         )
                     }
                 items.addAll(discountedItems)
 
-                val nextButton = driver.findElementByCssSelector("#regForm > div.section > div.eventProduct > div.paging > a.next.bgNone")
-                if (nextButton.getAttribute("href").endsWith("#none")) {
+                val nextButton = driver.findElementByCssSelector("body > div.viewContentsWrap > div > div > div.nextButtons > div")
+                if (nextButton.getAttribute("style").contains("opacity")) {
                     break
                 } else {
                     nextButton.click()
@@ -86,24 +85,24 @@ class Emart24CollectorService(
         val items = mutableListOf<DiscountedItem>()
 
         try {
-            driver.get("https://emart24.co.kr/product/eventProduct.asp")
-            driver.executeScript("javascript:goTab('2n1')")
+            driver.get("https://www.emart24.co.kr/goods/event?search=&category_seq=2&align=")
 
             while (true) {
                 // save all
-                val discountedItems = driver.findElementsByCssSelector("#regForm > div.section > div.eventProduct > div.tabContArea > ul > li")
+                val discountedItems = driver.findElementsByCssSelector("body > div.viewContentsWrap > div > section.itemList.active > div")
                     .map {
+                        val priceText = it.findElement(By.cssSelector("div.itemTxtWrap > span")).text.replace(Regex("[,원\\s]"), "")
                         DiscountedItem(
-                            name = it.findElement(By.cssSelector( "div > p.productDiv")).text.trim(),
-                            price = it.findElement(By.cssSelector("div > p.price")).text.replace(Regex("[,원\\s]"), "").toBigDecimal(),
-                            imageUrl = it.findElement(By.cssSelector("div.box > p.productImg > img")).getAttribute("src"),
-                            discountType = DiscountType.parse(it.findElement(By.cssSelector("div > div > p > img")).getAttribute("alt").replace(Regex("[\\s]"), "").take(3)),
+                            name = it.findElement(By.cssSelector( "div.itemTxtWrap > div.itemtitle > p")).text.trim(),
+                            price = if (priceText.isBlank()) BigDecimal.ZERO else priceText.toBigDecimal(),
+                            imageUrl = it.findElement(By.cssSelector("div.itemImg > img")).getAttribute("src"),
+                            discountType = DiscountType.parse(it.findElement(By.cssSelector("div.itemTit > span.twopl.floatR")).text.replace(Regex("[\\s]"), "").take(3)),
                         )
                     }
                 items.addAll(discountedItems)
 
-                val nextButton = driver.findElementByCssSelector("#regForm > div.section > div.eventProduct > div.paging > a.next.bgNone")
-                if (nextButton.getAttribute("href").endsWith("#none")) {
+                val nextButton = driver.findElementByCssSelector("body > div.viewContentsWrap > div > div > div.nextButtons > div")
+                if (nextButton.getAttribute("style").contains("opacity")) {
                     break
                 } else {
                     nextButton.click()
