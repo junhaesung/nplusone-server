@@ -49,8 +49,9 @@ class SecurityConfig(
     override fun configure(http: HttpSecurity) {
         http.antMatcher("/api/v1/**")
             .authorizeRequests()
-            // FIXME: client authentication 개발되면 items api 도 인증필요
+            // FIXME: client authentication 개발되면 items, search-words api 도 인증필요
             .antMatchers("/api/v1/items/**").permitAll()
+            .antMatchers("/api/v1/search-words").permitAll()
             .antMatchers("/api/v1/members/login").permitAll()
             .anyRequest().hasAuthority(MEMBER_ROLE_NAME)
         http.cors().configurationSource(corsConfigurationSource())
