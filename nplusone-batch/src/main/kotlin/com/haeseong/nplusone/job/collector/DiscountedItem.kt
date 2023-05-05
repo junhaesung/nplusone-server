@@ -10,6 +10,7 @@ data class DiscountedItem(
     val price: BigDecimal?,
     val imageUrl: String?,
     val discountType: DiscountType,
+    val referenceUrl: String? = null,
 ) {
     fun validate() {
         require(!name.isNullOrBlank()) { "'name' is must not blank" }

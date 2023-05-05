@@ -1,5 +1,6 @@
 package com.haeseong.nplusone.domain.item
 
+import com.haeseong.nplusone.domain.item.category.ItemCategory
 import org.hibernate.annotations.GenericGenerator
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
@@ -20,6 +21,8 @@ class Item(
     val itemId: Long = 0L,
     val name: String,
     val price: BigDecimal,
+    @OneToMany(mappedBy = "item", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val itemCategories: MutableList<ItemCategory> = mutableListOf(),
 ) {
     @CreatedDate
     lateinit var createdAt: LocalDateTime

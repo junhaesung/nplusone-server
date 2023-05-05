@@ -29,6 +29,11 @@ class ScrappingResult(
     @Enumerated(EnumType.STRING)
     val storeType: StoreType,
     val referenceDate: LocalDate,
+    val referenceUrl: String? = null,
+    @ElementCollection
+    @CollectionTable(name = "scrappingResultCategoryName", joinColumns = [JoinColumn(name = "scrappingResultId")])
+    @Column(name = "categoryName")
+    val categoryNames: MutableList<String> = mutableListOf(),
 ) {
     @CreatedDate
     lateinit var createdAt: LocalDateTime
@@ -59,6 +64,7 @@ class ScrappingResult(
             discountType = scrappingResultCreateVo.discountType,
             storeType = scrappingResultCreateVo.storeType,
             referenceDate = scrappingResultCreateVo.referenceDate,
+            referenceUrl = scrappingResultCreateVo.referenceUrl,
         )
     }
 }
