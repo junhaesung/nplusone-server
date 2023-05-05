@@ -33,13 +33,17 @@ class ScrappingResult(
     @ElementCollection
     @CollectionTable(name = "scrappingResultCategoryName", joinColumns = [JoinColumn(name = "scrappingResultId")])
     @Column(name = "categoryName")
-    val categoryNames: MutableList<String> = mutableListOf(),
+    val categoryNames: MutableSet<String> = mutableSetOf(),
 ) {
     @CreatedDate
     lateinit var createdAt: LocalDateTime
 
     @LastModifiedDate
     lateinit var updatedAt: LocalDateTime
+
+    fun addCategoryNames(categoryNames: Set<String>) {
+        this.categoryNames.addAll(categoryNames)
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

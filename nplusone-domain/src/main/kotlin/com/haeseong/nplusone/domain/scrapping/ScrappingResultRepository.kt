@@ -29,4 +29,10 @@ interface ScrappingResultRepository : JpaRepository<ScrappingResult, Long> {
         offsetScrappingResultId: Long,
         pageable: Pageable
     ): Slice<ScrappingResult>
+
+    fun findByReferenceDateAndStoreTypeOrderByScrappingResultId(
+        referenceDate: LocalDate,
+        storeType: StoreType,
+        pageable: Pageable,
+    ): Slice<ScrappingResult>
 }
