@@ -12,4 +12,5 @@ data class ScrappingResultCreateVo(
     val discountType: DiscountType,
     val storeType: StoreType,
     val referenceDate: LocalDate,
+    val referenceUrl: String? = null,
 )

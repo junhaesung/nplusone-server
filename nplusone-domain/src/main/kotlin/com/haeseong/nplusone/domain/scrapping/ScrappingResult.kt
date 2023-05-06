@@ -29,12 +29,21 @@ class ScrappingResult(
     @Enumerated(EnumType.STRING)
     val storeType: StoreType,
     val referenceDate: LocalDate,
+    val referenceUrl: String? = null,
+    @ElementCollection
+    @CollectionTable(name = "scrappingResultCategoryName", joinColumns = [JoinColumn(name = "scrappingResultId")])
+    @Column(name = "categoryName")
+    val categoryNames: MutableSet<String> = mutableSetOf(),
 ) {
     @CreatedDate
     lateinit var createdAt: LocalDateTime
 
     @LastModifiedDate
     lateinit var updatedAt: LocalDateTime
+
+    fun addCategoryNames(categoryNames: Set<String>) {
+        this.categoryNames.addAll(categoryNames)
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -59,6 +68,7 @@ class ScrappingResult(
             discountType = scrappingResultCreateVo.discountType,
             storeType = scrappingResultCreateVo.storeType,
             referenceDate = scrappingResultCreateVo.referenceDate,
+            referenceUrl = scrappingResultCreateVo.referenceUrl,
         )
     }
 }

@@ -45,6 +45,9 @@ class CuCollectorService(
                             imageUrl = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_img > img"))
                                 .getAttribute("src"),
                             discountType = DiscountType.parse(it.findElement(By.cssSelector("a > div.badge > span")).text.trim()),
+                            referenceUrl = getReferenceUrl(
+                                href = it.findElement(By.cssSelector("a")).getAttribute("href"),
+                            ),
                         )
                     } catch (e: Exception) {
                         val name = it.findElement(By.cssSelector("a > div.prod_wrap > div.prod_text > div.name")).text
@@ -55,6 +58,12 @@ class CuCollectorService(
                 }
         } finally {
             driver.quit()
+        }
+    }
+
+    private fun getReferenceUrl(href: String): String? {
+        return LINK_PATTERN.matchEntire(href)?.let {
+            "https://cu.bgfretail.com/product/view.do?category=event&gdIdx=${it.groups[1]?.value}"
         }
     }
 
@@ -92,6 +101,7 @@ class CuCollectorService(
                         discountType = it.discountType,
                         storeType = StoreType.CU,
                         referenceDate = now,
+                        referenceUrl = it.referenceUrl,
                     )
                 )
             } catch (e: ScrappingResultDuplicatedException) {
@@ -102,5 +112,6 @@ class CuCollectorService(
 
     companion object {
         private val log: Logger = LoggerFactory.getLogger(CuCollectorService::class.java)
+        private val LINK_PATTERN = Regex("javascript:view\\((\\d+)\\);")
     }
 }
