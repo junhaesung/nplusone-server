@@ -26,8 +26,8 @@ jobs:
           arguments: build
       - name: Build docker images
         run: |
-          docker build -t ${{ vars.DOCKER_IMAGE_REPOSITORY }}/${{ vars.DOCKER_IMAGE_NAME_API }}:${{ github.sha }} .
-          docker build -t ${{ vars.DOCKER_IMAGE_REPOSITORY }}/${{ vars.DOCKER_IMAGE_NAME_API }}:latest .
+          docker build -t ${{ vars.DOCKER_IMAGE_REPOSITORY }}/${{ vars.DOCKER_IMAGE_NAME_API }}:${{ github.sha }} ./nplusone-api
+          docker build -t ${{ vars.DOCKER_IMAGE_REPOSITORY }}/${{ vars.DOCKER_IMAGE_NAME_API }}:latest ./nplusone-api
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
