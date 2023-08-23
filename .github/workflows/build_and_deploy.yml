@@ -1,0 +1,52 @@
+name: Build and deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ develop, master ]
+    paths:
+      - 'nplusone-admin/**'
+      - 'nplusone-api/**'
+      - 'nplusone-batch/**'
+      - 'nplusone-domain/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@v2.4.2
+        with:
+          arguments: build
+      - name: Build docker images
+        run: |
+          docker build -t ${{ vars.DOCKER_IMAGE_REPOSITORY }}/${{ vars.DOCKER_IMAGE_NAME_API }}:${{ github.sha }} .
+          docker build -t ${{ vars.DOCKER_IMAGE_REPOSITORY }}/${{ vars.DOCKER_IMAGE_NAME_API }}:latest .
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - name: Push docker images
+        run: |
+          docker push ${{ vars.DOCKER_IMAGE_REPOSITORY }}/${{ vars.DOCKER_IMAGE_NAME_API }}:${{ github.sha }}
+          docker push ${{ vars.DOCKER_IMAGE_REPOSITORY }}/${{ vars.DOCKER_IMAGE_NAME_API }}:latest
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ vars.SSH_HOST }}
+          port: ${{ vars.SSH_PORT }}
+          username: ${{ vars.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: ${{ vars.SSH_SCRIPT }}
