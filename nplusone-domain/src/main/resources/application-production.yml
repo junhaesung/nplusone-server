@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ENC(rBv+/Lj946yHgcp0gXqVwAMjaJRPpgfK+Au0/CFGsR7/Bjjgh2EjdEhR9Sv+rnruwBxPq4nBRvdI0j1lF7528otQn+ODhrhtK18+9LLPogzd/Nei6pG3neyBqWXujO4o4y/UeZLLEQs7M72Xzd1LDyU4GQqSLTJ/sGMzPFoUsUmPZk/yqWDOaUtTPVqK4Vvn)
-    username: ENC(fhe3sYw0YJQuDTIE/61OZ2+sSDa4GZzLDnc7ODRcTMuxfIgMrWN3s+4gXsL92XtZ)
-    password: ENC(tSP43W3E4swvM1POYN6Y0hJ0kffm4TwqC/ek1jNT8WBTiC9Um5E/u/FRIAAruHKK)
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_SCHEMA}?serverTimezone=Asia/Seoul
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
