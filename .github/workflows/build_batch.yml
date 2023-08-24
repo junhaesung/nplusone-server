@@ -1,12 +1,11 @@
-name: Build and deploy
+name: Build batch
 
 on:
   workflow_dispatch:
   push:
     branches: [ develop, master ]
     paths:
-      - 'nplusone-admin/**'
-      - 'nplusone-api/**'
+      - 'nplusone-batch/**'
       - 'nplusone-domain/**'
 
 jobs:
@@ -25,8 +24,8 @@ jobs:
           arguments: build
       - name: Build docker images
         run: |
-          docker build -t ${{ vars.DOCKER_IMAGE_REPOSITORY }}/${{ vars.DOCKER_IMAGE_NAME_API }}:${{ github.sha }} ./nplusone-api
-          docker build -t ${{ vars.DOCKER_IMAGE_REPOSITORY }}/${{ vars.DOCKER_IMAGE_NAME_API }}:latest ./nplusone-api
+          docker build -t ${{ vars.DOCKER_IMAGE_REPOSITORY }}/${{ vars.DOCKER_IMAGE_NAME_BATCH }}:${{ github.sha }} ./nplusone-batch
+          docker build -t ${{ vars.DOCKER_IMAGE_REPOSITORY }}/${{ vars.DOCKER_IMAGE_NAME_BATCH }}:latest ./nplusone-batch
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -39,17 +38,5 @@ jobs:
           mask-password: 'true'
       - name: Push docker images
         run: |
-          docker push ${{ vars.DOCKER_IMAGE_REPOSITORY }}/${{ vars.DOCKER_IMAGE_NAME_API }}:${{ github.sha }}
-          docker push ${{ vars.DOCKER_IMAGE_REPOSITORY }}/${{ vars.DOCKER_IMAGE_NAME_API }}:latest
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Executing remote ssh commands using ssh key
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ vars.SSH_HOST }}
-          port: ${{ vars.SSH_PORT }}
-          username: ${{ vars.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: ${{ vars.SSH_SCRIPT }}
+          docker push ${{ vars.DOCKER_IMAGE_REPOSITORY }}/${{ vars.DOCKER_IMAGE_NAME_BATCH }}:${{ github.sha }}
+          docker push ${{ vars.DOCKER_IMAGE_REPOSITORY }}/${{ vars.DOCKER_IMAGE_NAME_BATCH }}:latest
