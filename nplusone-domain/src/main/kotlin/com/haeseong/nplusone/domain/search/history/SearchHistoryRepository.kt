@@ -11,6 +11,7 @@ import java.time.LocalDateTime
 interface SearchHistoryRepository : JpaRepository<SearchHistory, Long> {
     fun findByMember_memberId(memberId: Long, pageable: Pageable): List<SearchHistory>
     fun findByMember_memberIdAndSearchHistoryId(memberId: Long, searchHistoryId: Long): SearchHistory?
+    fun findByMember_memberId(memberId: Long): List<SearchHistory>
     @Query(
         value = "SELECT search_word as searchWord, count(search_history_id) AS searchCount " +
                 "FROM search_history " +

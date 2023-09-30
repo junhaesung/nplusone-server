@@ -40,4 +40,14 @@ class SearchHistoryController(
         )
         return ApiResponse.success()
     }
+
+    @DeleteMapping
+    fun deleteAll(
+        @ApiIgnore authentication: Authentication,
+    ): ApiResponse<*> {
+        searchHistoryService.deleteAll(
+            memberId = authentication.resolveMemberId(),
+        )
+        return ApiResponse.success()
+    }
 }

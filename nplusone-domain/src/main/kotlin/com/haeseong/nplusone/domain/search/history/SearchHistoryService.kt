@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 interface SearchHistoryService {
     fun record(searchEvent: SearchEvent): SearchHistoryVo
     fun delete(memberId: Long, searchHistoryId: Long)
+    fun deleteAll(memberId: Long)
     fun getSearchHistories(memberId: Long): List<SearchHistoryVo>
 }
 
@@ -46,6 +47,12 @@ class SearchHistoryServiceImpl(
     override fun delete(memberId: Long, searchHistoryId: Long) {
         searchHistoryRepository.findByMember_memberIdAndSearchHistoryId(memberId, searchHistoryId)
             ?.run { searchHistoryRepository.delete(this) }
+    }
+
+    @Transactional
+    override fun deleteAll(memberId: Long) {
+        searchHistoryRepository.findByMember_memberId(memberId)
+            .forEach { searchHistoryRepository.delete(it) }
     }
 
     override fun getSearchHistories(memberId: Long): List<SearchHistoryVo> {
