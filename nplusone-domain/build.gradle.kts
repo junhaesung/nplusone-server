@@ -4,7 +4,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("mysql:mysql-connector-java")
-    implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")
     implementation("com.querydsl:querydsl-jpa")
     implementation("com.querydsl:querydsl-apt")
     annotationProcessor("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties["querydsl.version"]}:jpa")
